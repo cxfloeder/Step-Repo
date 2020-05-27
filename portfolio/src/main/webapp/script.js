@@ -16,13 +16,16 @@
  * Adds a random greeting to the page.
  */
 function addRandomGreeting() {
-  const greetings =
-      ['My favorite color is green.', 'I like playing music (Piano, Guitar, Drums)', "I'm good at bowling.", 'There are 10 kids in my family.'];
+    const greetings =
+        ['My favorite color is green.', 
+        'I like playing music (Piano, Guitar, Drums)', 
+        "I'm good at bowling.", 
+        'There are 10 kids in my family.'];
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+    // Pick a random greeting.
+    const greeting = greetings[Math.floor(Math.random() * greetings.length)];
 
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+    // Add it to the page.
+    const greetingContainer = document.getElementById('greeting-container');
+    greetingContainer.innerText = greeting;
 }
