@@ -8,11 +8,9 @@
     margin-top: 20px;
 }
 
-#pic_content{
-    justify-content: center;
-}
 
-#pictures{
+
+#pictures img{
     margin: 10px;
     max-height: 200px;
     max-width: 200px;
