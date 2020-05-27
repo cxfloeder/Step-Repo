@@ -29,3 +29,10 @@ function addRandomGreeting() {
     const greetingContainer = document.getElementById('greeting-container');
     greetingContainer.innerText = greeting;
 }
+
+/**
+ * Increments the value on times the button has been clicked
+ */
+function incrementCount() {
+    
+}

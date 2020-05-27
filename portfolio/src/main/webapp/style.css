@@ -1,3 +1,15 @@
+#home_header {
+    background: rgb(255, 252, 171);
+    opacity: 0.9;
+    border-radius: 5px;
+    border-style: solid;
+}
+#home_content {
+    margin-left: auto;
+    margin-right: auto;
+    height: max-content;
+}
+
 #content {
     margin-left: auto;
     margin-right: auto;
@@ -8,10 +20,48 @@
     margin-top: 20px;
 }
 
+/**
+ this is where the Image_Gallery.html specific CSS stuff is
+*/
+#gallery_header {
+    background: rgb(255, 54, 54);
+    opacity: 0.9;
+    border-radius: 5px;
+    border-style: solid;
+}
 
+#picture {
+    margin: 5px;
+    border: thin solid gainsboro;
+    float: left;
+    width: 202px;
+}
 
-#pictures img{
-    margin: 10px;
-    max-height: 200px;
-    max-width: 200px;
+#picture img {
+    width: 100%;
+    height: auto;  
+}
+
+#picture:hover {
+  border: thin solid black;
+}
+
+#caption {
+    padding: 15px;
+    text-align: center;
+}
+/**
+ this is where the LinkedIn_Info.html specific CSS stuff is
+*/
+#network_header {
+    background: rgb(115, 227, 255);
+    opacity: 0.9;
+    border-radius: 5px;
+    border-style: solid;
+}
+
+#network_body {
+    margin-left: auto;
+    margin-right: auto;
+    width: 650px;
 }
