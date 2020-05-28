@@ -15,7 +15,7 @@
 /**
  * Adds a random greeting to the page.
  */
-function addRandomGreeting() {
+function addRandomFact() {
     const greetings =
         ['My favorite color is green.', 
         'I like playing music (Piano, Guitar, Drums)', 
@@ -28,11 +28,4 @@ function addRandomGreeting() {
     // Add it to the page.
     const greetingContainer = document.getElementById('greeting-container');
     greetingContainer.innerText = greeting;
-}
-
-/**
- * Increments the value on times the button has been clicked
- */
-function incrementCount() {
-    
 }

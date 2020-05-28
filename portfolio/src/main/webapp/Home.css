@@ -1,0 +1,20 @@
+/**
+ this is where the Home.html specific CSS stuff is
+*/
+#home_header {
+    background: rgb(255, 252, 171);
+    opacity: 0.9;
+    border-radius: 5px;
+    border-style: solid;
+}
+
+#home_body {
+    font-family: "Georgia";
+    margin-left: auto;
+    margin-right: auto;
+    height: max-content;
+}
+
+#greeting-container {
+    margin-top: 20px;
+}

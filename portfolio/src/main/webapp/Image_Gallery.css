@@ -1,0 +1,36 @@
+/**
+ this is where the Image_Gallery.html specific CSS stuff is
+*/
+#gallery_header {
+    background: rgb(255, 54, 54);
+    opacity: 0.9;
+    border-radius: 5px;
+    border-style: solid;
+}
+
+#gallery_body {
+    margin-left: auto;
+    margin-right: auto;
+    width: 650px;
+}
+
+#picture {
+    margin: 5px;
+    border: thin solid gainsboro;
+    float: left;
+    width: 202px;
+}
+
+#picture img {
+    width: 100%;
+    height: auto;  
+}
+
+#picture:hover {
+  border: thin solid black;
+}
+
+#caption {
+    padding: 15px;
+    text-align: center;
+}
