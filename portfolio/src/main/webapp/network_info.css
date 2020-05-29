@@ -1,6 +1,6 @@
 /* This is where the LinkedIn_Info.html specific CSS stuff is */
 body {
-    background-image: linear-gradient(to left,#f00,#00f);
+    background-image: linear-gradient(to left,rgb(255, 0, 0),rgb(0, 0, 255));
     width: 100%;
     height: 100%;
     background-size: cover;
