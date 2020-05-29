@@ -1,6 +1,6 @@
-/**
- Creates a back-button  
-*/
+/* This is for CSS elements that are in multiple files */
+
+/* Creates a back-button  */
 a:hover {
     background-color:white;
     color: black;
@@ -20,9 +20,11 @@ a:hover {
     border-radius: 50%;
 }
 
-/**
-    creates a dropdown page menu
-*/
+.white {
+    color: white;
+}
+
+/* Creates a dropdown page menu */
 .drop_menu {
     position: absolute;
     right: 475px;
@@ -54,7 +56,7 @@ a:hover {
   display: block;
 }
 
-.dropdown_content a:hover {background-color: #ddd;}
+.dropdown_content a:hover {background-color: rgb(221, 221, 221);}
 
 .drop_menu:hover .dropdown_content {display: block;}
 
