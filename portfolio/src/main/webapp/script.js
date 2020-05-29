@@ -16,16 +16,26 @@
  * Adds a random greeting to the page.
  */
 function addRandomFact() {
-    const greetings =
+    const facts =
         ['My favorite color is green.', 
         'I like playing music (Piano, Guitar, Drums)', 
         "I'm good at bowling.", 
-        'There are 10 kids in my family.'];
+        'There are 10 kids in my family.',
+        'I drive a blue Tacoma.',
+        'I drive a blue Tacoma.',
+        'I have a DQ visor.',
+        'I enjoy playing chess',
+        'My favorite number is 17',
+        'I play the buckets.',
+        "I'm an uncle.",
+        'I used to have a buzz cut.',
+        'I got my first phone when I was 18.',
+        'I like to jump-rope.'];
 
     // Pick a random greeting.
-    const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+    const response = facts[Math.floor(Math.random() * facts.length)];
 
     // Add it to the page.
     const greetingContainer = document.getElementById('greeting-container');
-    greetingContainer.innerText = greeting;
+    greetingContainer.innerText = response;
 }
