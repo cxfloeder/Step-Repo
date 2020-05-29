@@ -1,23 +1,65 @@
 <!DOCTYPE html>
 <html>
-    
+
 <head>
-    <meta charset="UTF-8">
-    <title>Charlie's Gallery</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+	<meta charset="UTF-8">
+	<title>Charlie's Gallery</title>
+	<link rel="stylesheet" href="image_gallery.css">
+	<link rel="stylesheet" href="common.css">
+	<script src="script.js"></script>
 </head>
 
 <body>
-    <div id="content">
-        <h1><center>Charlie's Pictures</center></h1>
-        <div id="pictures">
-            <a href="new_images/selfie.jpg"><img src="new_images/selfie.jpg"/></a>
-            <a href="new_images/IMG_0037.JPG"><img src="new_images/IMG_0037.JPG"/></a>
-            <a href="new_images/IMG_0054.JPG"><img src="new_images/IMG_0054.JPG"/></a>
-            <a href="new_images/IMG_0085.JPG"><img src="new_images/IMG_0085.JPG"/></a>
-            <a href="new_images/IMG_0222.JPG"><img src="new_images/IMG_0222.JPG"/></a>
-            <a href="new_images/IMG_043.jpg"><img src="new_images/IMG_043.jpg"/></a>
-        </div>
-    </div>
+	<div id="gallery_body">
+		<div class="drop_menu">
+			<button class="menu_button">Page Menu</button>
+			<div class="dropdown_content">
+				<a href="Home.html">Home</a>
+				<a href="Image_Gallery.html">Images</a>
+				<a href="Network_Info.html">Network Info</a>
+			</div>
+		</div>
+		<a href="Home.html" class="padding previous round">&#8249;</a>
+		<h1>
+			<center><u>Charlie's Pictures</u></center>
+		</h1>
+		<div id="picture">
+			<a href="new_images/selfie.jpg"><img src="new_images/selfie.jpg"></a>
+				<div class="desc">
+					<center>Selfie in front of NE capital building</center>
+				</div>
+		</div>
+		<div id="picture">
+			<a href="new_images/IMG_0085.JPG"><img src="new_images/IMG_0085.JPG"></a>
+				<div class="desc">
+					<center>Selfie in front of a sick McLaren</center>
+				</div>
+		</div>
+		<div id="picture">
+			<a href="new_images/IMG_0222.JPG"><img src="new_images/IMG_0222.JPG"></a>
+				<div class="desc">
+					<center>Selfie chilling with some pumpkins</center>
+				</div>
+		</div>
+		<div id="picture">
+			<a href="new_images/IMG_043.jpg"><img src="new_images/IMG_043.jpg"/></a>
+				<div class="desc">
+					<center>Me and my pals at a volleyball game</center>
+				</div>
+		</div>
+		<div id="picture">
+			<a href="new_images/IMG_0037.JPG"><img src="new_images/IMG_0037.JPG"></a>
+				<div class="desc">
+					<center>The Raikes School / Kauffman Res.</center>
+				</div>
+		</div>
+		<div id="picture">
+			<a href="new_images/IMG_0054.JPG"><img src="new_images/IMG_0054.JPG"></a>
+				<div class="desc">
+					<center>Memorial Stadium on game-day</center>
+				</div>
+		</div>
+	</div>
 </body>
+
+</html>
