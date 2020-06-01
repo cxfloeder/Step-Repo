@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/** Uses fetch() to add a message to the DOM */
+/** Uses fetch() to add a message to the DOM. */
  function getMessage() {
-    // fetches from the DataServlet
+    // Fetches from the DataServlet.
     const responsePromise = fetch("/data");
 
-    // passes the response to handleResponse after the request is complete
+    // Passes the response to handleResponse after the request is complete.
     responsePromise.then(handleResponse);
  }
 
@@ -27,18 +27,16 @@
  */
  function handleResponse(response) {
     const textPromise = response.text();
-
     textPromise.then(addMessageToDom);
  }
 
-/** Adds the message to the DOM */
+/** Adds the message to the DOM. */
 function addMessageToDom(message) {
-
     const messageContainer = document.getElementById('message_container');
     messageContainer.innerText = message;
 }
 
-/** Practices using arrow functions to shorten the code */
+/** Practices using arrow functions to shorten the code. */
 function getMessageUsingArrowFunctions() {
     fetch("/data").then(response => response.text()).then((message) => {
         document.getElementById('message_container').innerText = message;
