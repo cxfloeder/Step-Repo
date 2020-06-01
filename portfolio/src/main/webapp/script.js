@@ -12,10 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+const MESSAGE_API_URL = "/data";
+
 /** Uses fetch() to add a message to the DOM. */
  function getMessage() {
     // Fetches from the DataServlet.
-    const responsePromise = fetch("/data");
+    const responsePromise = fetch(MESSAGR_API_URL);
 
     // Passes the response to handleResponse after the request is complete.
     responsePromise.then(handleResponse);
@@ -38,7 +40,7 @@ function addMessageToDom(message) {
 
 /** Practices using arrow functions to shorten the code. */
 function getMessageUsingArrowFunctions() {
-    fetch("/data").then(response => response.text()).then((message) => {
+    fetch(MESSAGE_API_URL).then(response => response.text()).then((message) => {
         document.getElementById('message_container').innerText = message;
     });
 }
