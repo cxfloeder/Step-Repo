@@ -14,19 +14,46 @@
 
 package com.google.sps.servlets;
 
+import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/** Servlet that returns some example content. TODO: modify this file to handle comments data. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
+    ArrayList<String> messageList = new ArrayList<String>(
+        Arrays.asList("The weather is rainy.", "Bring an Umbrella.", "Watch out for big puddles."));
 
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html;");
-    response.getWriter().println("Hello Charlie!");
-  }
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Convert the java ArrayList<String> data to a JSON String.
+        String jsonMessage = messageListAsJson();
+
+        // Send the JSON message as the response.
+        response.setContentType("text/html;");
+        response.getWriter().println(jsonMessage);
+    }
+
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Get the input from the user
+        String comment = request.getParameter("comment-input");        
+        
+        // Respond with the result.
+        response.setContentType("text.html;");
+        response.getWriter().println(comment);
+    }
+
+    /**
+     * Converts a Java ArrayList<String> into a JSON string using Gson.  
+     */
+    private String messageListAsJson() {
+        Gson gson = new Gson();
+        String jsonMessage = gson.toJson(messageList);
+        return jsonMessage;
+    }
 }
