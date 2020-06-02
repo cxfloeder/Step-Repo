@@ -22,10 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/** Servlet that returns some example content. TODO: modify this file to handle comments data. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
-    // Create a String ArrayList and fill it with data.
     ArrayList<String> messageList = new ArrayList<String>(
         Arrays.asList("The weather is rainy.", "Bring an Umbrella.", "Watch out for big puddles."));
 
