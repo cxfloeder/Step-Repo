@@ -17,7 +17,7 @@ const MESSAGE_API_URL = "/data";
 /** Uses fetch() to add a message to the DOM. */
  function getMessage() {
     // Fetches from the DataServlet.
-    const responsePromise = fetch(MESSAGR_API_URL);
+    const responsePromise = fetch(MESSAGE_API_URL);
 
     // Passes the response to handleResponse after the request is complete.
     responsePromise.then(handleResponse);
