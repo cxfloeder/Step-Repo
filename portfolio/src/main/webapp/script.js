@@ -45,13 +45,6 @@ function getMessageUsingArrowFunctions() {
     });
 }
 
-/** Parses JSON string into usuable a JS object. */
-function parseJSON() {
-    fetch(MESSAGE_API_URL).then(response => response.json()).then((message) => {
-        document.getElementById('message_container').innerText = message;
-    });
-}
-
 /**
  * Adds a random greeting to the page.
  */
