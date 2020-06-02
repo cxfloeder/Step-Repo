@@ -9,14 +9,15 @@
 	<script src="script.js"></script>
 </head>
 
-<body>
+<body onload="getMessageUsingArrowFunctions()">
 	<div id="home_body">
+        <div id="message_container"></div>
 		<div class="drop_menu">
 			<button class="menu_button">Page Menu</button>
 			<div class="dropdown_content">
-				<a href="Home.html">Home</a>
-				<a href="Image_Gallery.html">Images</a> 
-				<a href="Network_Info.html">Network Info</a>
+				<a href="home.html">Home</a>
+				<a href="image_gallery.html">Images</a> 
+				<a href="network_info.html">Network Info</a>
 			</div>
 		</div>
 		<h1>
@@ -57,11 +58,11 @@
 			<li>Dream Vacation: Australia</li>
 		</ul>
 		<p>
-			Click <a href="Network_Info.html" class="white">here</a> for LinkedIn and GitHub
+			Click <a href="network_info.html" class="white">here</a> for LinkedIn and GitHub
 			information.
 		</p>
 		<p>
-			Click <a href="Image_Gallery.html" class="white">here</a> to see my image gallery
+			Click <a href="image_gallery.html" class="white">here</a> to see my image gallery
 			information.
 		</p>
 		<button onclick="addRandomFact()">Fact Generator</button>
