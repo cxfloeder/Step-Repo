@@ -32,7 +32,7 @@ public class DataServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Get the input from the user
+        // Get the input from the user.
         String comment = request.getParameter("comment-input");        
         
         // Respond with the result.
