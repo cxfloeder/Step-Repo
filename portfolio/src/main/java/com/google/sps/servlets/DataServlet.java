@@ -31,17 +31,27 @@ public class DataServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Convert the java ArrayList<String> data to a JSON String.
-        String jsonMessage = convertToJsonUsingGson(messageList);
+        String jsonMessage = messageListAsJson();
 
         // Send the JSON message as the response.
         response.setContentType("text/html;");
         response.getWriter().println(jsonMessage);
     }
 
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Get the input from the user
+        String comment = request.getParameter("comment-input");        
+        
+        // Respond with the result.
+        response.setContentType("text.html;");
+        response.getWriter().println(comment);
+    }
+
     /**
      * Converts a Java ArrayList<String> into a JSON string using Gson.  
      */
-    private String convertToJsonUsingGson(ArrayList<String> messageList) {
+    private String messageListAsJson() {
         Gson gson = new Gson();
         String jsonMessage = gson.toJson(messageList);
         return jsonMessage;
