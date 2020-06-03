@@ -31,8 +31,10 @@ import java.util.*;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
     private final DatastoreService datastore;
-    private final String inputName = "comment-input";
-    private final String datastoreLabel = "Task";
+    private static final String INPUT_NAME = "comment-input";
+    private static final String DATASTORE_LABEL = "Task";
+    private static final String HOME_URL = "/home.html";
+    private static final String JSON_RESPONSE = "application/json;"
 
     public DataServlet() {
         super();
@@ -41,34 +43,34 @@ public class DataServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Query query = new Query(datastoreLabel);
+        Query query = new Query(DATASTORE_LABEL);
         PreparedQuery results = datastore.prepare(query);
 
         ArrayList<String> commentList = new ArrayList<String>();
         for (Entity entity : results.asIterable()) {
-            commentList.add((String) entity.getProperty(inputName));
+            commentList.add((String) entity.getProperty(INPUT_NAME));
         }
 
         // Convert the java ArrayList<String> data to a JSON String.
         String jsonMessage = messageListAsJson(commentList);
 
         // Send the JSON message as the response.
-        response.setContentType("application/json;");
+        response.setContentType(JSON_RESPONSE);
         response.getWriter().println(jsonMessage);
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Get the input from the user.
-        String comment = request.getParameter(inputName);        
+        String comment = request.getParameter(INPUT_NAME);        
         
-        Entity taskEntity = new Entity(datastoreLabel);
-        taskEntity.setProperty(inputName, comment);
+        Entity taskEntity = new Entity(DATASTORE_LABEL);
+        taskEntity.setProperty(INPUT_NAME, comment);
 
         // Store the user comment in datastore.
         datastore.put(taskEntity);
 
-        response.sendRedirect("/home.html");
+        response.sendRedirect(HOME_URL);
     }
 
     /**
