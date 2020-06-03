@@ -31,6 +31,8 @@ import java.util.*;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
     private final DatastoreService datastore;
+    private final String inputName = "comment-input";
+    private final String datastoreLabel = "Task";
 
     public DataServlet() {
         super();
@@ -39,15 +41,12 @@ public class DataServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Delete everything from previous step.
-        Query query = new Query("Task");
+        Query query = new Query(datastoreLabel);
         PreparedQuery results = datastore.prepare(query);
 
         ArrayList<String> commentList = new ArrayList<String>();
         for (Entity entity : results.asIterable()) {
-            String comment = (String) entity.getProperty("comment-input");
-
-            commentList.add(comment);
+            commentList.add((String) entity.getProperty(inputName));
         }
 
         // Convert the java ArrayList<String> data to a JSON String.
@@ -61,10 +60,10 @@ public class DataServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Get the input from the user.
-        String comment = request.getParameter("comment-input");        
+        String comment = request.getParameter(inputName);        
         
-        Entity taskEntity = new Entity("Task");
-        taskEntity.setProperty("comment-input", comment);
+        Entity taskEntity = new Entity(datastoreLabel);
+        taskEntity.setProperty(inputName, comment);
 
         // Store the user comment in datastore.
         datastore.put(taskEntity);
