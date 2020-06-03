@@ -42,7 +42,7 @@ public class DataServlet extends HttpServlet {
         Entity taskEntity = new Entity("Task");
         taskEntity.setProperty("comment-input", comment);
 
-        // Stores the user comment in datastore
+        // Stores the user comment in datastore.
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         datastore.put(taskEntity);
 
