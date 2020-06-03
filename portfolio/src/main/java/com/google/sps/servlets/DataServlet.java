@@ -60,10 +60,14 @@ public class DataServlet extends HttpServlet {
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Get the input from the user.
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {   
+        // Get the comment input from the user.
         String comment = request.getParameter(INPUT_NAME);        
         
+        // Get the number of comments the user wants to view.
+        int numComments = Integer.parseInt(request.getParameter("num-comments"));
+        System.out.println(numComments);
+
         Entity taskEntity = new Entity(DATASTORE_LABEL);
         taskEntity.setProperty(INPUT_NAME, comment);
 
