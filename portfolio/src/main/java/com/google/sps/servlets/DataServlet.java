@@ -28,6 +28,12 @@ import java.util.*;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data. */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
+    private final DatastoreService datastore;
+
+    public DataServlet() {
+        super();
+        datastore = DatastoreServiceFactory.getDatastoreService();
+    }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -42,8 +48,7 @@ public class DataServlet extends HttpServlet {
         Entity taskEntity = new Entity("Task");
         taskEntity.setProperty("comment-input", comment);
 
-        // Stores the user comment in datastore.
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        // Store the user comment in datastore.
         datastore.put(taskEntity);
 
         response.sendRedirect("/home.html");
