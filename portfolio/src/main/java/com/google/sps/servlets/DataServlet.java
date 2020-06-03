@@ -17,6 +17,8 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -29,6 +31,10 @@ import java.util.*;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
     private final DatastoreService datastore;
+    private static final String INPUT_NAME = "comment-input";
+    private static final String DATASTORE_LABEL = "Task";
+    private static final String HOME_URL = "/home.html";
+    private static final String JSON_RESPONSE = "application/json;"
 
     public DataServlet() {
         super();
@@ -37,20 +43,42 @@ public class DataServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Delete everything from previous step.
+        Query query = new Query(DATASTORE_LABEL);
+        PreparedQuery results = datastore.prepare(query);
+
+        ArrayList<String> commentList = new ArrayList<String>();
+        for (Entity entity : results.asIterable()) {
+            commentList.add((String) entity.getProperty(INPUT_NAME));
+        }
+
+        // Convert the java ArrayList<String> data to a JSON String.
+        String jsonMessage = messageListAsJson(commentList);
+
+        // Send the JSON message as the response.
+        response.setContentType(JSON_RESPONSE);
+        response.getWriter().println(jsonMessage);
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Get the input from the user.
-        String comment = request.getParameter("comment-input");        
+        String comment = request.getParameter(INPUT_NAME);        
         
-        Entity taskEntity = new Entity("Task");
-        taskEntity.setProperty("comment-input", comment);
+        Entity taskEntity = new Entity(DATASTORE_LABEL);
+        taskEntity.setProperty(INPUT_NAME, comment);
 
         // Store the user comment in datastore.
         datastore.put(taskEntity);
 
-        response.sendRedirect("/home.html");
+        response.sendRedirect(HOME_URL);
+    }
+
+    /**
+     * Converts a Java ArrayList<String> into a JSON string using Gson.  
+     */
+    private String messageListAsJson(ArrayList<String> commentList) {
+        Gson gson = new Gson();
+        String jsonMessage = gson.toJson(commentList);
+        return jsonMessage;
     }
 }
