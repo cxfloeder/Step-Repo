@@ -17,6 +17,8 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -38,6 +40,22 @@ public class DataServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Delete everything from previous step.
+        Query query = new Query("Task");
+        PreparedQuery results = datastore.prepare(query);
+
+        ArrayList<String> commentList = new ArrayList<String>();
+        for (Entity entity : results.asIterable()) {
+            String comment = (String) entity.getProperty("comment-input");
+
+            commentList.add(comment);
+        }
+
+        // Convert the java ArrayList<String> data to a JSON String.
+        String jsonMessage = messageListAsJson(commentList);
+
+        // Send the JSON message as the response.
+        response.setContentType("application/json;");
+        response.getWriter().println(jsonMessage);
     }
 
     @Override
@@ -52,5 +70,14 @@ public class DataServlet extends HttpServlet {
         datastore.put(taskEntity);
 
         response.sendRedirect("/home.html");
+    }
+
+    /**
+     * Converts a Java ArrayList<String> into a JSON string using Gson.  
+     */
+    private String messageListAsJson(ArrayList<String> commentList) {
+        Gson gson = new Gson();
+        String jsonMessage = gson.toJson(commentList);
+        return jsonMessage;
     }
 }
