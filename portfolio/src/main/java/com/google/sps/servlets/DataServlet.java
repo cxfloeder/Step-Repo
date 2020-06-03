@@ -34,7 +34,7 @@ public class DataServlet extends HttpServlet {
     private static final String INPUT_NAME = "comment-input";
     private static final String DATASTORE_LABEL = "Task";
     private static final String HOME_URL = "/home.html";
-    private static final String JSON_RESPONSE = "application/json;"
+    private static final String JSON_RESPONSE = "application/json;";
 
     public DataServlet() {
         super();
