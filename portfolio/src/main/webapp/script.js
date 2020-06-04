@@ -52,15 +52,6 @@ function parseJSON() {
     });
 }
 
-async function displayComments() {
-    const response = await fetch('/data');
-    const messageArr = await response.json();
-
-    // Split messageArr into paragraph elements
-    var output = messageArr.map(str => "<p>" + str + "</p>");
-    document.getElementById('message_container').innerHTML = output.join("");
-}
-
 /**
  * Adds a random greeting to the page.
  */
@@ -87,4 +78,14 @@ function addRandomFact() {
     // Add it to the page.
     const greetingContainer = document.getElementById('greeting-container');
     greetingContainer.innerText = response;
+}
+
+
+async function displayComments() {
+    const response = await fetch('/data');
+    const messageArr = await response.json();
+
+    // Split messageArr into paragraph elements (maybe splice)
+    var output = messageArr.map(str => "<p>" + str + "</p>");
+    document.getElementById('comment_section').innerHTML = output.join("");
 }

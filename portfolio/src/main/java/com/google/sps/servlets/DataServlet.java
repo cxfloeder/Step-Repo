@@ -31,7 +31,8 @@ import java.util.*;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
     private final DatastoreService datastore;
-    private static final String INPUT_NAME = "comment-input";
+    private static final String COMMENT_INPUT = "comment-input";
+    private static final String NUM_COMMENTS_INPUT = "num-comments";
     private static final String DATASTORE_LABEL = "Task";
     private static final String HOME_URL = "/home.html";
     private static final String JSON_RESPONSE = "application/json;";
@@ -48,7 +49,7 @@ public class DataServlet extends HttpServlet {
 
         ArrayList<String> commentList = new ArrayList<String>();
         for (Entity entity : results.asIterable()) {
-            commentList.add((String) entity.getProperty(INPUT_NAME));
+            commentList.add((String) entity.getProperty(COMMENT_INPUT));
         }
 
         // Convert the java ArrayList<String> data to a JSON String.
@@ -62,14 +63,17 @@ public class DataServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {   
         // Get the comment input from the user.
-        String comment = request.getParameter(INPUT_NAME);        
-        
+        String comment = request.getParameter(COMMENT_INPUT);
+
+
         // Get the number of comments the user wants to view.
-        int numComments = Integer.parseInt(request.getParameter("num-comments"));
+        int numComments = Integer.parseInt(request.getParameter(NUM_COMMENTS_INPUT));
         System.out.println(numComments);
 
+
+        
         Entity taskEntity = new Entity(DATASTORE_LABEL);
-        taskEntity.setProperty(INPUT_NAME, comment);
+        taskEntity.setProperty(COMMENT_INPUT, comment);
 
         // Store the user comment in datastore.
         datastore.put(taskEntity);
