@@ -80,10 +80,9 @@ function addRandomFact() {
     greetingContainer.innerText = response;
 }
 
-
+/** Fetch and display the desired number of comments to the portfolio */
 async function displayComments() {
     const numComments = document.getElementById('num-comments').value;
-    console.log(numComments);
     const response = await fetch('/data?num-comments=' + numComments);
     const messageArr = await response.json();
 

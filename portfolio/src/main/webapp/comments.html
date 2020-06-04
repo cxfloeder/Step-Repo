@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Web Information</title>
+	<link rel="stylesheet" href="comments.css">
+	<link rel="stylesheet" href="common.css">
+	<script src="script.js"></script>
+</head>
+
+<body onload="displayComments()">
+	<div id="comments_body">
+		<div class="drop_menu">
+			<button class="menu_button">Page Menu</button>
+			<div class="dropdown_content">
+				<a href="home.html">Home</a>
+				<a href="image_gallery.html">Images</a>
+				<a href="network_info.html">Network Info</a>
+                <a href="comments.html">Comments</a>
+			</div>
+		</div>
+		<a href="home.html" class="padding previous round">&#8249;</a>
+		<h1>
+			<center><u>Comments</u></center>
+		</h1>
+		<h3>Add your comments here.</h3>
+        <form action="/data" method="POST">
+            <input type="text" name="comment-input" />
+            <br/>
+            <input type="submit" />
+
+        </form>    
+        <form action="javascript:displayComments()" method="GET">
+            <p>How many comments do you want to see?</p>
+            <input id="num-comments"type="number" name="num-comments" min="0" max ="20" value="0" />
+            <input type="submit" />
+        </form>
+        <div id="comment_section"></div>
+	</div>
+</body>
+
+</html>

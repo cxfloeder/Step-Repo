@@ -34,7 +34,7 @@ public class DataServlet extends HttpServlet {
     private static final String COMMENT_INPUT = "comment-input";
     private static final String NUM_COMMENTS_INPUT = "num-comments";
     private static final String DATASTORE_LABEL = "Task";
-    private static final String HOME_URL = "/home.html";
+    private static final String COMMENTS_URL = "/comments.html";
     private static final String JSON_RESPONSE = "application/json;";
 
     public DataServlet() {
@@ -47,15 +47,13 @@ public class DataServlet extends HttpServlet {
         Query query = new Query(DATASTORE_LABEL);
         PreparedQuery results = datastore.prepare(query);
 
-
         // Get the number of comments the user wants to view.
         int numComments = Integer.parseInt(request.getParameter(NUM_COMMENTS_INPUT));
-        System.out.println(numComments);
-
-
-        ArrayList<String> commentList = new ArrayList<String>();
         
+        ArrayList<String> commentList = new ArrayList<String>();
         int counter = 0;
+
+        // Add the users desired amount of non-empty comments.
         for (Entity entity : results.asIterable()) {
             if(counter == numComments)
             {
@@ -68,13 +66,9 @@ public class DataServlet extends HttpServlet {
                  counter++;
             }
         }
-
-
-
+        
         // Convert the java ArrayList<String> data to a JSON String.
         String jsonMessage = messageListAsJson(commentList);
-
-        System.out.println(jsonMessage);
 
         // Send the JSON message as the response.
         response.setContentType(JSON_RESPONSE);
@@ -92,7 +86,7 @@ public class DataServlet extends HttpServlet {
         // Store the user comment in datastore.
         datastore.put(taskEntity);
 
-        response.sendRedirect(HOME_URL);
+        response.sendRedirect(COMMENTS_URL);
     }
 
     /**
