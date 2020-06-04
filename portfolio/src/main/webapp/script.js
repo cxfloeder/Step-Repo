@@ -82,7 +82,9 @@ function addRandomFact() {
 
 
 async function displayComments() {
-    const response = await fetch('/data');
+    const numComments = document.getElementById('num-comments').value;
+    console.log(numComments);
+    const response = await fetch('/data?num-comments=' + numComments);
     const messageArr = await response.json();
 
     // Split messageArr into paragraph elements (maybe splice)

@@ -72,10 +72,12 @@
             <br/>
             <input type="submit" />
 
-            <p>How many comments do you want to see?</p>
-            <input type="number" name="num-comments" min="1" max ="10" value="1" />
-            <input type="submit" />
         </form>    
+        <form action="javascript:displayComments()" method="GET">
+            <p>How many comments do you want to see?</p>
+            <input id="num-comments"type="number" name="num-comments" min="1" max ="10" value="1" />
+            <input type="submit" />
+        </form>
         <div id="comment_section"></div>
 	</div>
 </body>

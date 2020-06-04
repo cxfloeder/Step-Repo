@@ -47,13 +47,34 @@ public class DataServlet extends HttpServlet {
         Query query = new Query(DATASTORE_LABEL);
         PreparedQuery results = datastore.prepare(query);
 
+
+        // Get the number of comments the user wants to view.
+        int numComments = Integer.parseInt(request.getParameter(NUM_COMMENTS_INPUT));
+        System.out.println(numComments);
+
+
         ArrayList<String> commentList = new ArrayList<String>();
+        
+        int counter = 0;
         for (Entity entity : results.asIterable()) {
-            commentList.add((String) entity.getProperty(COMMENT_INPUT));
+            if(counter == numComments)
+            {
+                break;
+            }
+            String comment = (String) entity.getProperty(COMMENT_INPUT);
+            if(!comment.equals(""))
+            {
+                 commentList.add(comment);
+                 counter++;
+            }
         }
+
+
 
         // Convert the java ArrayList<String> data to a JSON String.
         String jsonMessage = messageListAsJson(commentList);
+
+        System.out.println(jsonMessage);
 
         // Send the JSON message as the response.
         response.setContentType(JSON_RESPONSE);
@@ -64,13 +85,6 @@ public class DataServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {   
         // Get the comment input from the user.
         String comment = request.getParameter(COMMENT_INPUT);
-
-
-        // Get the number of comments the user wants to view.
-        int numComments = Integer.parseInt(request.getParameter(NUM_COMMENTS_INPUT));
-        System.out.println(numComments);
-
-
         
         Entity taskEntity = new Entity(DATASTORE_LABEL);
         taskEntity.setProperty(COMMENT_INPUT, comment);
@@ -82,9 +96,9 @@ public class DataServlet extends HttpServlet {
     }
 
     /**
-     * Converts a Java ArrayList<String> into a JSON string using Gson.  
+     * Converts a Java List<String> into a JSON string using Gson.  
      */
-    private String messageListAsJson(ArrayList<String> commentList) {
+    private String messageListAsJson(List<String> commentList) {
         Gson gson = new Gson();
         String jsonMessage = gson.toJson(commentList);
         return jsonMessage;
