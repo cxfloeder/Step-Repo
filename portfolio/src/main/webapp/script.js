@@ -45,6 +45,22 @@ function getMessageUsingArrowFunctions() {
     });
 }
 
+/** Parses JSON string into usuable a JS object. */
+function parseJSON() {
+    fetch(MESSAGE_API_URL).then(response => response.json()).then((message) => {
+        document.getElementById('message_container').innerText = message;
+    });
+}
+
+async function displayComments() {
+    const response = await fetch('/data');
+    const messageArr = await response.json();
+
+    // Split messageArr into paragraph elements
+    var output = messageArr.map(str => "<p>" + str + "</p>");
+    document.getElementById('message_container').innerHTML = output.join("");
+}
+
 /**
  * Adds a random greeting to the page.
  */

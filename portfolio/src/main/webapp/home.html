@@ -9,9 +9,8 @@
 	<script src="script.js"></script>
 </head>
 
-<body>
+<body onload="displayComments()">
 	<div id="home_body">
-        <div id="message_container"></div>
 		<div class="drop_menu">
 			<button class="menu_button">Page Menu</button>
 			<div class="dropdown_content">
@@ -77,6 +76,7 @@
             <input type="number" name="num-comments" min="1" max ="10" value="1" />
             <input type="submit" />
         </form>    
+        <div id="message_container"></div>
 	</div>
 </body>
 
