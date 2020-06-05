@@ -47,9 +47,14 @@ public class DataServlet extends HttpServlet {
         Query query = new Query(DATASTORE_LABEL);
         PreparedQuery results = datastore.prepare(query);
 
-        // Get the number of comments the user wants to view.
-        int numComments = Integer.parseInt(request.getParameter(NUM_COMMENTS_INPUT));
-        
+        int numComments;
+        // Get the number of comments the user wants to view. (PROBLEM)
+        try {
+            numComments = Integer.parseInt(request.getParameter(NUM_COMMENTS_INPUT));
+        } catch (NumberFormatException e) {
+            numComments = 20;
+        }
+
         ArrayList<String> commentList = new ArrayList<String>();
         int counter = 0;
 
