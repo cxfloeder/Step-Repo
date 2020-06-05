@@ -62,8 +62,8 @@ public class DataServlet extends HttpServlet {
             String comment = (String) entity.getProperty(COMMENT_INPUT);
             if(!comment.equals(""))
             {
-                 commentList.add(comment);
-                 counter++;
+                commentList.add(comment);
+                counter++;
             }
         }
         

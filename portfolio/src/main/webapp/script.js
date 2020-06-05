@@ -13,45 +13,7 @@
 // limitations under the License.
 
 const MESSAGE_API_URL = "/data";
-
-/** Uses fetch() to add a message to the DOM. */
- function getMessage() {
-    // Fetches from the DataServlet.
-    const responsePromise = fetch(MESSAGE_API_URL);
-
-    // Passes the response to handleResponse after the request is complete.
-    responsePromise.then(handleResponse);
- }
-
-/**
- * Handles response by converting it to text and passing the result to
- * addQuoteToDom().
- */
- function handleResponse(response) {
-    const textPromise = response.text();
-    textPromise.then(addMessageToDom);
- }
-
-/** Adds the message to the DOM. */
-function addMessageToDom(message) {
-    const messageContainer = document.getElementById('message_container');
-    messageContainer.innerText = message;
-}
-
-/** Practices using arrow functions to shorten the code. */
-function getMessageUsingArrowFunctions() {
-    fetch(MESSAGE_API_URL).then(response => response.text()).then((message) => {
-        document.getElementById('message_container').innerText = message;
-    });
-}
-
-/** Parses JSON string into usuable a JS object. */
-function parseJSON() {
-    fetch(MESSAGE_API_URL).then(response => response.json()).then((message) => {
-        document.getElementById('message_container').innerText = message;
-    });
-}
-
+const PASSWORD = "CoolPeopleOnly";
 /**
  * Adds a random greeting to the page.
  */
@@ -89,4 +51,17 @@ async function displayComments() {
     // Split messageArr into paragraph elements (maybe splice)
     var output = messageArr.map(str => "<p>" + str + "</p>");
     document.getElementById('comment_section').innerHTML = output.join("");
+}
+
+/** Check if user entered the correct password. */
+function validatePassword(form) {
+    var commentPassword = form.password.value;
+
+    if(commentPassword == '' || commentPassword != PASSWORD) {
+        alert("Sorry, incorrect password.");
+    }
+    else {
+        alert("Access Granted.");
+        // Allow users to delete comments.
+    }
 }

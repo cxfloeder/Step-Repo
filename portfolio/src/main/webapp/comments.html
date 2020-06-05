@@ -9,7 +9,7 @@
 	<script src="script.js"></script>
 </head>
 
-<body onload="displayComments()">
+<body onchange="displayComments()">
 	<div id="comments_body">
 		<div class="drop_menu">
 			<button class="menu_button">Page Menu</button>
@@ -37,6 +37,12 @@
             <input type="submit" />
         </form>
         <div id="comment_section"></div>
+        <br/><br/>
+        <form onSubmit = "return validatePassword(this)"> 
+            <p>Enter the password to delete comments.</p>
+            <input type="password" name="password" size="25" /> 
+            <input type="submit" value="Submit">
+        </form> 
 	</div>
 </body>
 
