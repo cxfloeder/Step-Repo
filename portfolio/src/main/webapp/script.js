@@ -19,20 +19,20 @@ const PASSWORD = "CoolPeopleOnly";
  */
 function addRandomFact() {
     const facts =
-        ['My favorite color is green.', 
-        'I like playing music (Piano, Guitar, Drums)', 
-        "I'm good at bowling.", 
-        'There are 10 kids in my family.',
-        'I drive a blue Tacoma.',
-        'I drive a blue Tacoma.',
-        'I have a DQ visor.',
-        'I enjoy playing chess',
-        'My favorite number is 17',
-        'I play the buckets.',
-        "I'm an uncle.",
-        'I used to have a buzz cut.',
-        'I got my first phone when I was 18.',
-        'I like to jump-rope.'];
+        ['My favorite color is green.',
+            'I like playing music (Piano, Guitar, Drums)',
+            "I'm good at bowling.",
+            'There are 10 kids in my family.',
+            'I drive a blue Tacoma.',
+            'I drive a blue Tacoma.',
+            'I have a DQ visor.',
+            'I enjoy playing chess',
+            'My favorite number is 17',
+            'I play the buckets.',
+            "I'm an uncle.",
+            'I used to have a buzz cut.',
+            'I got my first phone when I was 18.',
+            'I like to jump-rope.'];
 
     // Pick a random greeting.
     const response = facts[Math.floor(Math.random() * facts.length)];
@@ -42,14 +42,14 @@ function addRandomFact() {
     greetingContainer.innerText = response;
 }
 
-/** Fetch and display the desired number of comments to the portfolio */
+/** Fetch and display the desired number of comments to the portfolio. */
 async function displayComments() {
     const numComments = document.getElementById('num-comments').value;
     const response = await fetch('/data?num-comments=' + numComments);
     const messageArr = await response.json();
 
     // Split messageArr into paragraph elements (maybe splice)
-    var output = messageArr.map(str => "<p>" + str + "</p>");
+    var output = messageArr.map(entity => "<p>" + entity.comment + "</p>");
     document.getElementById('comment_section').innerHTML = output.join("");
 }
 
@@ -57,11 +57,16 @@ async function displayComments() {
 function validatePassword(form) {
     var commentPassword = form.password.value;
 
-    if(commentPassword == '' || commentPassword != PASSWORD) {
+    if (commentPassword != PASSWORD) {
         alert("Sorry, incorrect password.");
     }
     else {
         alert("Access Granted.");
-        // Allow users to delete comments.
+        deleteComments();
     }
+}
+
+/** Delete the entire datastore. */
+function deleteComments() {
+    fetch('/delete-data');
 }

@@ -3,13 +3,13 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Web Information</title>
+	<title>Comments</title>
 	<link rel="stylesheet" href="comments.css">
 	<link rel="stylesheet" href="common.css">
 	<script src="script.js"></script>
 </head>
 
-<body onchange="displayComments()">
+<body>
 	<div id="comments_body">
 		<div class="drop_menu">
 			<button class="menu_button">Page Menu</button>
@@ -33,12 +33,12 @@
         </form>    
         <form action="javascript:displayComments()" method="GET">
             <p>How many comments do you want to see?</p>
-            <input id="num-comments"type="number" name="num-comments" min="0" max ="20" value="0" />
+            <input id="num-comments" type="number" name="num-comments" min="0" max ="20" value="0" />
             <input type="submit" />
         </form>
         <div id="comment_section"></div>
         <br/><br/>
-        <form onSubmit = "return validatePassword(this)"> 
+        <form onSubmit="return validatePassword(this)"> 
             <p>Enter the password to delete comments.</p>
             <input type="password" name="password" size="25" /> 
             <input type="submit" value="Submit">

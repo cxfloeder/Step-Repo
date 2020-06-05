@@ -48,14 +48,14 @@ public class DataServlet extends HttpServlet {
         PreparedQuery results = datastore.prepare(query);
 
         int numComments;
-        // Get the number of comments the user wants to view. (PROBLEM)
+        // Get the number of comments the user wants to view. 
         try {
             numComments = Integer.parseInt(request.getParameter(NUM_COMMENTS_INPUT));
         } catch (NumberFormatException e) {
             numComments = 20;
         }
 
-        ArrayList<String> commentList = new ArrayList<String>();
+        ArrayList<Map<String, String>> commentList = new ArrayList<Map<String, String>>();
         int counter = 0;
 
         // Add the users desired amount of non-empty comments.
@@ -67,7 +67,10 @@ public class DataServlet extends HttpServlet {
             String comment = (String) entity.getProperty(COMMENT_INPUT);
             if(!comment.equals(""))
             {
-                commentList.add(comment);
+                HashMap map = new HashMap();
+                map.put("id", entity.getKey());
+                map.put("comment", comment);
+                commentList.add(map);
                 counter++;
             }
         }
@@ -97,7 +100,7 @@ public class DataServlet extends HttpServlet {
     /**
      * Converts a Java List<String> into a JSON string using Gson.  
      */
-    private String messageListAsJson(List<String> commentList) {
+    private String messageListAsJson(List<Map<String, String>> commentList) {
         Gson gson = new Gson();
         String jsonMessage = gson.toJson(commentList);
         return jsonMessage;
