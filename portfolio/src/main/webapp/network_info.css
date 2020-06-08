@@ -1,4 +1,4 @@
-/* This is where the LinkedIn_Info.html specific CSS stuff is */
+/* This is where the network_info.html specific CSS stuff is. */
 body {
     background-image: linear-gradient(to left,rgb(255, 0, 0),rgb(0, 0, 255));
     width: 100%;
@@ -13,7 +13,7 @@ body {
     width: 650px;
 }
 
-/* Creates a functional dropdown message when hovering */
+/* Creates a functional dropdown message when hovering. */
 #dropdown {
     position: relative;
     display: inline-block;

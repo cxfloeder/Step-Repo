@@ -1,0 +1,15 @@
+/* This is where the comments.html specific CSS stuff is. */
+body {
+    background-image: linear-gradient(to right,rgb(255, 0, 0),rgb(0, 0, 255));
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    color:white;
+} 
+
+#comments_body {
+    margin-left: auto;
+    margin-right: auto;
+    width: 650px;
+}
+

@@ -31,10 +31,12 @@ import java.util.*;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
     private final DatastoreService datastore;
-    private static final String INPUT_NAME = "comment-input";
+    private static final String COMMENT_INPUT = "comment-input";
+    private static final String NUM_COMMENTS_INPUT = "num-comments";
     private static final String DATASTORE_LABEL = "Task";
-    private static final String HOME_URL = "/home.html";
-    private static final String JSON_RESPONSE = "application/json;"
+    private static final String COMMENTS_URL = "/comments.html";
+    private static final String JSON_RESPONSE = "application/json;";
+    private static final int DEFAULT_COMMENT_SIZE = 20;
 
     public DataServlet() {
         super();
@@ -46,11 +48,17 @@ public class DataServlet extends HttpServlet {
         Query query = new Query(DATASTORE_LABEL);
         PreparedQuery results = datastore.prepare(query);
 
-        ArrayList<String> commentList = new ArrayList<String>();
-        for (Entity entity : results.asIterable()) {
-            commentList.add((String) entity.getProperty(INPUT_NAME));
+        int numComments;
+        // Get the number of comments the user wants to view. 
+        try {
+            numComments = Integer.parseInt(request.getParameter(NUM_COMMENTS_INPUT));
+        } catch (NumberFormatException e) {
+            numComments = DEFAULT_COMMENT_SIZE;
         }
 
+        // Fill the ArrayList with the desired amount of non-empty comments.
+        ArrayList<Map<String, String>> commentList = loadComments(numComments, results);
+        
         // Convert the java ArrayList<String> data to a JSON String.
         String jsonMessage = messageListAsJson(commentList);
 
@@ -60,25 +68,49 @@ public class DataServlet extends HttpServlet {
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // Get the input from the user.
-        String comment = request.getParameter(INPUT_NAME);        
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {   
+        // Get the comment input from the user.
+        String comment = request.getParameter(COMMENT_INPUT);
         
         Entity taskEntity = new Entity(DATASTORE_LABEL);
-        taskEntity.setProperty(INPUT_NAME, comment);
+        taskEntity.setProperty(COMMENT_INPUT, comment);
 
         // Store the user comment in datastore.
         datastore.put(taskEntity);
 
-        response.sendRedirect(HOME_URL);
+        response.sendRedirect(COMMENTS_URL);
     }
 
     /**
-     * Converts a Java ArrayList<String> into a JSON string using Gson.  
+     * Converts a Java List<Map<String, String>> into a JSON string using Gson.  
      */
-    private String messageListAsJson(ArrayList<String> commentList) {
+    private String messageListAsJson(List<Map<String, String>> commentList) {
         Gson gson = new Gson();
         String jsonMessage = gson.toJson(commentList);
         return jsonMessage;
+    }
+
+    private ArrayList<Map<String, String>> loadComments(int numCommentsToLoad, PreparedQuery results)
+    {
+        ArrayList<Map<String, String>> commentList = new ArrayList<Map<String, String>>();
+        int counter = 0;
+
+        // Add the users desired amount of non-empty comments.
+        for (Entity entity : results.asIterable()) {
+            if(counter == numCommentsToLoad)
+            {
+                break;
+            }
+            String comment = (String) entity.getProperty(COMMENT_INPUT);
+            if(!comment.equals(""))
+            {
+                HashMap map = new HashMap();
+                map.put("id", entity.getKey());
+                map.put("comment", comment);
+                commentList.add(map);
+                counter++;
+            }
+        }
+        return commentList;
     }
 }

@@ -11,13 +11,13 @@
 
 <body>
 	<div id="home_body">
-        <div id="message_container"></div>
 		<div class="drop_menu">
 			<button class="menu_button">Page Menu</button>
 			<div class="dropdown_content">
 				<a href="home.html">Home</a>
 				<a href="image_gallery.html">Images</a> 
 				<a href="network_info.html">Network Info</a>
+                <a href="comments.html">Comments</a>
 			</div>
 		</div>
 		<h1>
@@ -65,14 +65,12 @@
 			Click <a href="image_gallery.html" class="white">here</a> to see my image gallery
 			information.
 		</p>
+        <p>
+			Click <a href="comments.html" class="white">here</a> to view the comments section
+			information.
+		</p>
 		<button onclick="addRandomFact()">Fact Generator</button>
 		<div id="greeting-container"></div>
-        <h3>Add your comments here.</h3>
-        <form action="/data" method="POST">
-            <input type="text" name="comment-input" />
-            <br/>
-            <input type="submit" />
-        </form>    
 	</div>
 </body>
 
