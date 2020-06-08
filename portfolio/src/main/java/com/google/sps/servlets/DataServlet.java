@@ -14,11 +14,13 @@
 
 package com.google.sps.servlets;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -36,6 +38,10 @@ public class DataServlet extends HttpServlet {
     private static final String DATASTORE_LABEL = "Task";
     private static final String COMMENTS_URL = "/comments.html";
     private static final String JSON_RESPONSE = "application/json;";
+    private static final String LOGIN_PAGE = "/login";
+    private static final String EMAIL_PROP = "email";
+    private static final String TIME_PROP = "timestamp";
+    private static final String COMMENT_PROP = "comment";
     private static final int DEFAULT_COMMENT_SIZE = 20;
 
     public DataServlet() {
@@ -45,7 +51,7 @@ public class DataServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Query query = new Query(DATASTORE_LABEL);
+        Query query = new Query(DATASTORE_LABEL).addSort(TIME_PROP, SortDirection.DESCENDING);
         PreparedQuery results = datastore.prepare(query);
 
         int numComments;
@@ -69,11 +75,22 @@ public class DataServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {   
-        // Get the comment input from the user.
+        UserService userService = UserServiceFactory.getUserService();
+
+        // Only logged-in users can comment.
+        if(!userService.isUserLoggedIn()) {
+            response.sendRedirect(LOGIN_PAGE);
+            return;
+        }
+
+        // Get the user's email and comment input.
         String comment = request.getParameter(COMMENT_INPUT);
-        
+        String email = userService.getCurrentUser().getEmail();
+
         Entity taskEntity = new Entity(DATASTORE_LABEL);
-        taskEntity.setProperty(COMMENT_INPUT, comment);
+        taskEntity.setProperty(COMMENT_PROP, comment);
+        taskEntity.setProperty(EMAIL_PROP, email);
+        taskEntity.setProperty(TIME_PROP, System.currentTimeMillis());
 
         // Store the user comment in datastore.
         datastore.put(taskEntity);
@@ -102,11 +119,13 @@ public class DataServlet extends HttpServlet {
                 break;
             }
             String comment = (String) entity.getProperty(COMMENT_INPUT);
+            String email = (String) entity.getProperty(EMAIL_PROP);
             if(!comment.equals(""))
             {
                 HashMap map = new HashMap();
                 map.put("id", entity.getKey());
-                map.put("comment", comment);
+                map.put(COMMENT_PROP, comment);
+                map.put(EMAIL_PROP, email);
                 commentList.add(map);
                 counter++;
             }
