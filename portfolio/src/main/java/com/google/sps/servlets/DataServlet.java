@@ -14,12 +14,10 @@
 
 package com.google.sps.servlets;
 
+import com.google.sps.data.Comment;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -63,8 +61,11 @@ public class DataServlet extends HttpServlet {
         }
 
         // Fill the ArrayList with the desired amount of non-empty comments.
-        ArrayList<Map<String, String>> commentList = loadComments(numComments, results);
+        ArrayList<Comment> commentList = loadComments(numComments, results);
         
+        // THE PROBLEM IS THAT YOUR ARE TRYING TO CONVERT OBJECTS TO JSON
+
+
         // Convert the java ArrayList<String> data to a JSON String.
         String jsonMessage = messageListAsJson(commentList);
 
@@ -99,17 +100,20 @@ public class DataServlet extends HttpServlet {
     }
 
     /**
-     * Converts a Java List<Map<String, String>> into a JSON string using Gson.  
+     * Converts a Java List<Comment> into a JSON string using Gson.  
      */
-    private String messageListAsJson(List<Map<String, String>> commentList) {
+    private String messageListAsJson(List<Comment> commentList) {
         Gson gson = new Gson();
-        String jsonMessage = gson.toJson(commentList);
+        String jsonMessage = "";
+        for(int i =0; i < commentList.size(); i++) {
+            jsonMessage += gson.toJson(commentList.get(i).toString()) + " ";
+        }
         return jsonMessage;
     }
 
-    private ArrayList<Map<String, String>> loadComments(int numCommentsToLoad, PreparedQuery results)
+    private ArrayList<Comment> loadComments(int numCommentsToLoad, PreparedQuery results)
     {
-        ArrayList<Map<String, String>> commentList = new ArrayList<Map<String, String>>();
+        ArrayList<Comment> commentList = new ArrayList<Comment>();
         int counter = 0;
 
         // Add the users desired amount of non-empty comments.
@@ -118,15 +122,12 @@ public class DataServlet extends HttpServlet {
             {
                 break;
             }
-            String comment = (String) entity.getProperty(COMMENT_INPUT);
+            String comment = (String) entity.getProperty(COMMENT_PROP);
             String email = (String) entity.getProperty(EMAIL_PROP);
             if(!comment.equals(""))
             {
-                HashMap map = new HashMap();
-                map.put("id", entity.getKey());
-                map.put(COMMENT_PROP, comment);
-                map.put(EMAIL_PROP, email);
-                commentList.add(map);
+                Comment comObject = new Comment(comment, entity.getKey(), email);
+                commentList.add(comObject);
                 counter++;
             }
         }
