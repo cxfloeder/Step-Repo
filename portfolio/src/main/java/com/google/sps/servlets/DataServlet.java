@@ -36,6 +36,7 @@ public class DataServlet extends HttpServlet {
     private static final String DATASTORE_LABEL = "Task";
     private static final String COMMENTS_URL = "/comments.html";
     private static final String JSON_RESPONSE = "application/json;";
+    private static final int DEFAULT_COMMENT_SIZE = 20;
 
     public DataServlet() {
         super();
@@ -52,28 +53,11 @@ public class DataServlet extends HttpServlet {
         try {
             numComments = Integer.parseInt(request.getParameter(NUM_COMMENTS_INPUT));
         } catch (NumberFormatException e) {
-            numComments = 20;
+            numComments = DEFAULT_COMMENT_SIZE;
         }
 
-        ArrayList<Map<String, String>> commentList = new ArrayList<Map<String, String>>();
-        int counter = 0;
-
-        // Add the users desired amount of non-empty comments.
-        for (Entity entity : results.asIterable()) {
-            if(counter == numComments)
-            {
-                break;
-            }
-            String comment = (String) entity.getProperty(COMMENT_INPUT);
-            if(!comment.equals(""))
-            {
-                HashMap map = new HashMap();
-                map.put("id", entity.getKey());
-                map.put("comment", comment);
-                commentList.add(map);
-                counter++;
-            }
-        }
+        // Fill the ArrayList with the desired amount of non-empty comments.
+        ArrayList<Map<String, String>> commentList = loadComments(numComments, results);
         
         // Convert the java ArrayList<String> data to a JSON String.
         String jsonMessage = messageListAsJson(commentList);
@@ -104,5 +88,29 @@ public class DataServlet extends HttpServlet {
         Gson gson = new Gson();
         String jsonMessage = gson.toJson(commentList);
         return jsonMessage;
+    }
+
+    private ArrayList<Map<String, String>> loadComments(int numCommentsToLoad, PreparedQuery results)
+    {
+        ArrayList<Map<String, String>> commentList = new ArrayList<Map<String, String>>();
+        int counter = 0;
+
+        // Add the users desired amount of non-empty comments.
+        for (Entity entity : results.asIterable()) {
+            if(counter == numCommentsToLoad)
+            {
+                break;
+            }
+            String comment = (String) entity.getProperty(COMMENT_INPUT);
+            if(!comment.equals(""))
+            {
+                HashMap map = new HashMap();
+                map.put("id", entity.getKey());
+                map.put("comment", comment);
+                commentList.add(map);
+                counter++;
+            }
+        }
+        return commentList;
     }
 }

@@ -53,7 +53,10 @@ async function displayComments() {
     document.getElementById('comment_section').innerHTML = output.join("");
 }
 
-/** Check if user entered the correct password. */
+/** 
+ * Check if user entered the correct password. The password isn't protected
+ * or secure, just a fun feature for learning purposes.
+ */
 function validatePassword(form) {
     var commentPassword = form.password.value;
 
