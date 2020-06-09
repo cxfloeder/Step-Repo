@@ -48,8 +48,8 @@ async function displayComments() {
     const response = await fetch('/data?num-comments=' + numComments);
     const messageArr = await response.json();
 
-    // Split messageArr into paragraph elements (maybe splice)
-    var output = messageArr.map(entity => "<p>" + entity.comment + "</p>");
+    // Split messageArr into paragraph elements
+    var output = messageArr.map(str => "<p>" + str.email + ": " + str.message + "</p>");
     document.getElementById('comment_section').innerHTML = output.join("");
 }
 
@@ -67,6 +67,9 @@ function validatePassword(form) {
         alert("Access Granted.");
         deleteComments();
     }
+}
+
+function isLoggedIn() {
 }
 
 /** Delete the entire datastore. */

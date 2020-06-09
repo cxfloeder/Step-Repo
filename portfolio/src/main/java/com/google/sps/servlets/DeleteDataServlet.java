@@ -21,6 +21,8 @@ import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.sps.data.Comment;
 import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -42,13 +44,12 @@ public class DeleteDataServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {   
-        Query query = new Query(DATASTORE_LABEL);
+        Query query = new Query(Comment.COMMENT_ENTITY).addSort(Comment.TIMESTAMP_PROPERTY, SortDirection.DESCENDING);
         PreparedQuery results = datastore.prepare(query);
 
         // Retrieve and delete datastore comments.
         for (Entity entity : results.asIterable()) {
-            Key taskEntityKey = KeyFactory.createKey("Task", entity.getKey().getId());
-            deleteComment(taskEntityKey);
+            deleteComment(entity.getKey());
         }
 
         response.getWriter();

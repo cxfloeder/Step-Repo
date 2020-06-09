@@ -14,11 +14,11 @@
 
 package com.google.sps.servlets;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
+import com.google.sps.data.Comment;
+import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -31,11 +31,12 @@ import java.util.*;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
     private final DatastoreService datastore;
-    private static final String COMMENT_INPUT = "comment-input";
     private static final String NUM_COMMENTS_INPUT = "num-comments";
     private static final String DATASTORE_LABEL = "Task";
     private static final String COMMENTS_URL = "/comments.html";
-    private static final String JSON_RESPONSE = "application/json;";
+    private static final String TEXT_RESPONSE = "text/html;";
+    private static final String LOGIN_PAGE = "/login";
+    private static final String EMAIL_PROP = "email";
     private static final int DEFAULT_COMMENT_SIZE = 20;
 
     public DataServlet() {
@@ -45,7 +46,7 @@ public class DataServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Query query = new Query(DATASTORE_LABEL);
+        Query query = new Query(Comment.COMMENT_ENTITY).addSort(Comment.TIMESTAMP_PROPERTY, SortDirection.DESCENDING);
         PreparedQuery results = datastore.prepare(query);
 
         int numComments;
@@ -57,24 +58,29 @@ public class DataServlet extends HttpServlet {
         }
 
         // Fill the ArrayList with the desired amount of non-empty comments.
-        ArrayList<Map<String, String>> commentList = loadComments(numComments, results);
-        
+        ArrayList<Comment> commentList = loadComments(numComments, results);
+       
         // Convert the java ArrayList<String> data to a JSON String.
         String jsonMessage = messageListAsJson(commentList);
 
         // Send the JSON message as the response.
-        response.setContentType(JSON_RESPONSE);
+        response.setContentType(TEXT_RESPONSE);
         response.getWriter().println(jsonMessage);
     }
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {   
-        // Get the comment input from the user.
-        String comment = request.getParameter(COMMENT_INPUT);
-        
-        Entity taskEntity = new Entity(DATASTORE_LABEL);
-        taskEntity.setProperty(COMMENT_INPUT, comment);
+        UserService userService = UserServiceFactory.getUserService();
 
+        // Only logged-in users can comment.
+        if(!userService.isUserLoggedIn()) {
+            response.sendRedirect(LOGIN_PAGE);
+            return;
+        }
+
+        String email = userService.getCurrentUser().getEmail();
+        Entity taskEntity = parseForm(request, email);
+       
         // Store the user comment in datastore.
         datastore.put(taskEntity);
 
@@ -82,17 +88,21 @@ public class DataServlet extends HttpServlet {
     }
 
     /**
-     * Converts a Java List<Map<String, String>> into a JSON string using Gson.  
+     * Converts a Java List<Comment> into a JSON string using Gson.  
      */
-    private String messageListAsJson(List<Map<String, String>> commentList) {
+    private String messageListAsJson(List<Comment> commentList) {
         Gson gson = new Gson();
         String jsonMessage = gson.toJson(commentList);
         return jsonMessage;
     }
 
-    private ArrayList<Map<String, String>> loadComments(int numCommentsToLoad, PreparedQuery results)
+    private Entity parseForm(HttpServletRequest request, String email) {
+        return new Comment(request, email).toEntity();
+    }
+
+    private ArrayList<Comment> loadComments(int numCommentsToLoad, PreparedQuery results)
     {
-        ArrayList<Map<String, String>> commentList = new ArrayList<Map<String, String>>();
+        ArrayList<Comment> commentList = new ArrayList<Comment>();
         int counter = 0;
 
         // Add the users desired amount of non-empty comments.
@@ -101,13 +111,10 @@ public class DataServlet extends HttpServlet {
             {
                 break;
             }
-            String comment = (String) entity.getProperty(COMMENT_INPUT);
-            if(!comment.equals(""))
+            Comment comment = new Comment(entity);
+            if(!comment.message.equals(""))
             {
-                HashMap map = new HashMap();
-                map.put("id", entity.getKey());
-                map.put("comment", comment);
-                commentList.add(map);
+                commentList.add(comment);
                 counter++;
             }
         }
