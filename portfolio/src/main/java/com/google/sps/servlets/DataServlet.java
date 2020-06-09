@@ -31,15 +31,12 @@ import java.util.*;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
     private final DatastoreService datastore;
-    private static final String COMMENT_INPUT = "comment-input";
     private static final String NUM_COMMENTS_INPUT = "num-comments";
     private static final String DATASTORE_LABEL = "Task";
     private static final String COMMENTS_URL = "/comments.html";
-    private static final String JSON_RESPONSE = "application/json;";
+    private static final String TEXT_RESPONSE = "text/html;";
     private static final String LOGIN_PAGE = "/login";
     private static final String EMAIL_PROP = "email";
-    private static final String TIME_PROP = "timestamp";
-    private static final String COMMENT_PROP = "comment";
     private static final int DEFAULT_COMMENT_SIZE = 20;
 
     public DataServlet() {
@@ -67,7 +64,7 @@ public class DataServlet extends HttpServlet {
         String jsonMessage = messageListAsJson(commentList);
 
         // Send the JSON message as the response.
-        response.setContentType("text/html;");
+        response.setContentType(TEXT_RESPONSE);
         response.getWriter().println(jsonMessage);
     }
 

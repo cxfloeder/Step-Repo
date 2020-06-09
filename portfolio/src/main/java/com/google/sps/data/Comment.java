@@ -7,11 +7,8 @@ public class Comment {
     public static final String TIMESTAMP_PROPERTY = "timestamp";
     public static final String MESSAGE_PROPERTY = "message";
     public static final String EMAIL_PROPERTY = "email";
-
     public static final String COMMENT_FORM_ID = "comment-input";
-
     public static final String COMMENT_ENTITY = "Comment";
-    
     public final long timestamp;
     public final String message;
     public String email;
