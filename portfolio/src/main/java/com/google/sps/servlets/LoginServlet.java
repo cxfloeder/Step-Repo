@@ -27,25 +27,38 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     private static final String LOG_PAGE_URL = "/login";
-
+    private static final String COMMENTS_URL = "/comments.html";
+    private static final String TEXT_TYPE = "text/html";
+    private boolean isLoggedIn;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/html");
+        response.setContentType(TEXT_TYPE);
         PrintWriter out = response.getWriter();
         UserService userService = UserServiceFactory.getUserService();
-
+            
         if(userService.isUserLoggedIn()) {
             String userEmail = userService.getCurrentUser().getEmail();
             String logoutURL = userService.createLogoutURL(LOG_PAGE_URL);
 
+//            response.sendRedirect(COMMENTS_URL);
             out.println("<p>Hello " + userEmail + "! You are logged in!</p>");
-            out.println("<p>Logout <a href=\"" + logoutURL + "\">here</a>.</p>");
+            out.println("<p>To view the comments, click <a href=\"" + COMMENTS_URL + "\">here</a>.</p>");
+            out.println("<br/>");
+            out.println("<p>Logout <a href=\"" + logoutURL + "\">here</a>.</p>");           
         } else {
             String loginURL = userService.createLoginURL(LOG_PAGE_URL);
 
-            out.println("<p>You are not logged in.</p>");
+            out.println("<p>You are currently not logged in. Log in to view comment-page.</p>");
             out.println("<p>Login <a href=\"" + loginURL + "\">here</a>.</p>");
         }
+    }
+
+    public void setLoginStatus(boolean status) {
+        isLoggedIn = status;
+    }
+
+    public boolean getLoginStatus() {
+        return isLoggedIn;
     }
 }

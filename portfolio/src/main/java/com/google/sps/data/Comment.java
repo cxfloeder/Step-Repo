@@ -1,39 +1,39 @@
 package com.google.sps.data;
 
-import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.Entity;
+import javax.servlet.http.HttpServletRequest;
 
 public class Comment {
-    public String comment;
-    public Key id;
+    public static final String TIMESTAMP_PROPERTY = "timestamp";
+    public static final String MESSAGE_PROPERTY = "message";
+    public static final String EMAIL_PROPERTY = "email";
+
+    public static final String COMMENT_FORM_ID = "comment-input";
+
+    public static final String COMMENT_ENTITY = "Comment";
+    
+    public final long timestamp;
+    public final String message;
     public String email;
 
-    public Comment(String comment, Key id, String email) {
-        this.comment = comment;
-        this.id = id;
-        this.email = email;
+    public Comment(Entity entity) {
+        timestamp = (long) entity.getProperty(TIMESTAMP_PROPERTY);
+        message = (String) entity.getProperty(MESSAGE_PROPERTY);
+        email = (String) entity.getProperty(EMAIL_PROPERTY);
     }
 
-    // pubic void setComment(String comment)
+    public Comment(HttpServletRequest request, String userEmail) {
+        timestamp = System.currentTimeMillis();
+        message = request.getParameter(COMMENT_FORM_ID); 
+        email = userEmail;
+    }
 
-
-    // public String getComment() {
-    //     return comment;
-    // }
-
-    // public Key getID() {
-    //     return id;
-    // }
-
-    // public String getEmail() {
-    //     return email;
-    // }
-
-    @Override
-    public String toString() {
-        return "comment: " + comment + " id: " + id + " email: " + email;
+    /** Return an Entity for DataStore */
+    public Entity toEntity() {
+        Entity commentEntity = new Entity(COMMENT_ENTITY);
+        commentEntity.setProperty(TIMESTAMP_PROPERTY, timestamp);
+        commentEntity.setProperty(MESSAGE_PROPERTY, message);
+        commentEntity.setProperty(EMAIL_PROPERTY, email);
+        return commentEntity;
     }
 }
-
-// find the right place to put it and add correct import to Dataservlet
-
-// create toString method to format comments nicely

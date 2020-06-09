@@ -49,7 +49,7 @@ public class DataServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Query query = new Query(DATASTORE_LABEL).addSort(TIME_PROP, SortDirection.DESCENDING);
+        Query query = new Query(Comment.COMMENT_ENTITY).addSort(Comment.TIMESTAMP_PROPERTY, SortDirection.DESCENDING);
         PreparedQuery results = datastore.prepare(query);
 
         int numComments;
@@ -62,15 +62,12 @@ public class DataServlet extends HttpServlet {
 
         // Fill the ArrayList with the desired amount of non-empty comments.
         ArrayList<Comment> commentList = loadComments(numComments, results);
-        
-        // THE PROBLEM IS THAT YOUR ARE TRYING TO CONVERT OBJECTS TO JSON
-
-
+       
         // Convert the java ArrayList<String> data to a JSON String.
         String jsonMessage = messageListAsJson(commentList);
 
         // Send the JSON message as the response.
-        response.setContentType(JSON_RESPONSE);
+        response.setContentType("text/html;");
         response.getWriter().println(jsonMessage);
     }
 
@@ -84,15 +81,9 @@ public class DataServlet extends HttpServlet {
             return;
         }
 
-        // Get the user's email and comment input.
-        String comment = request.getParameter(COMMENT_INPUT);
         String email = userService.getCurrentUser().getEmail();
-
-        Entity taskEntity = new Entity(DATASTORE_LABEL);
-        taskEntity.setProperty(COMMENT_PROP, comment);
-        taskEntity.setProperty(EMAIL_PROP, email);
-        taskEntity.setProperty(TIME_PROP, System.currentTimeMillis());
-
+        Entity taskEntity = parseForm(request, email);
+       
         // Store the user comment in datastore.
         datastore.put(taskEntity);
 
@@ -104,11 +95,12 @@ public class DataServlet extends HttpServlet {
      */
     private String messageListAsJson(List<Comment> commentList) {
         Gson gson = new Gson();
-        String jsonMessage = "";
-        for(int i =0; i < commentList.size(); i++) {
-            jsonMessage += gson.toJson(commentList.get(i).toString()) + " ";
-        }
+        String jsonMessage = gson.toJson(commentList);
         return jsonMessage;
+    }
+
+    private Entity parseForm(HttpServletRequest request, String email) {
+        return new Comment(request, email).toEntity();
     }
 
     private ArrayList<Comment> loadComments(int numCommentsToLoad, PreparedQuery results)
@@ -122,11 +114,9 @@ public class DataServlet extends HttpServlet {
             {
                 break;
             }
-            String comment = (String) entity.getProperty(COMMENT_PROP);
-            String email = (String) entity.getProperty(EMAIL_PROP);
-            if(!comment.equals(""))
+            Comment comObject = new Comment(entity);
+            if(!comObject.message.equals(""))
             {
-                Comment comObject = new Comment(comment, entity.getKey(), email);
                 commentList.add(comObject);
                 counter++;
             }
