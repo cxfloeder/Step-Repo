@@ -69,9 +69,6 @@ function validatePassword(form) {
     }
 }
 
-function isLoggedIn() {
-}
-
 /** Delete the entire datastore. */
 function deleteComments() {
     fetch('/delete-data');
