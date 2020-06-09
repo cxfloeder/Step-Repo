@@ -111,10 +111,10 @@ public class DataServlet extends HttpServlet {
             {
                 break;
             }
-            Comment comObject = new Comment(entity);
-            if(!comObject.message.equals(""))
+            Comment comment = new Comment(entity);
+            if(!comment.message.equals(""))
             {
-                commentList.add(comObject);
+                commentList.add(comment);
                 counter++;
             }
         }
