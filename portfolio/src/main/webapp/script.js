@@ -74,3 +74,32 @@ function deleteComments() {
     fetch('/delete-data');
 }
 
+async function getLogInURL()
+{
+    var response = await fetch('/login');
+    var map = await response.json();
+    console.log(map["loginURL"]);
+    if(map["loginURL"] != "")
+    {
+        window.location = map["loginURL"];
+    }
+    else
+    {
+        window.location = "comments.html";
+    }
+}
+
+async function getLogOutURL()
+{
+    var response = await fetch('/login');
+    var map = await response.json();
+    console.log(map["logoutURL"]);
+    if(map["logoutURL"] != "")
+    {
+        window.location = map["logoutURL"];
+    }
+    else
+    {
+         window.location = "home.html";
+    }
+}

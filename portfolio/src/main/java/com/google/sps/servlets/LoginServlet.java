@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
+
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     private static final String LOG_PAGE_URL = "/login";
@@ -37,18 +38,35 @@ public class LoginServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType(TEXT_TYPE);
         UserService userService = UserServiceFactory.getUserService();
+        HashMap<String, String> loginObject = new HashMap<String, String>();
+        String loginURL = "";
+        String logoutURL="";
+        String loginStatus="";
 
         if(userService.isUserLoggedIn()) {
-            response.sendRedirect(COMMENTS_URL);   
+            logoutURL = userService.createLogoutURL(HOME_PAGE_URL); 
+            loginStatus = "true"; 
         } else {
-            response.sendRedirect(HOME_PAGE_URL);
+            loginURL = userService.createLoginURL(COMMENTS_URL);
+            loginStatus = "false";
         }
+
+        loginObject.put("loginURL", loginURL);
+        loginObject.put("logoutURL", logoutURL);
+        loginObject.put("loginStatus", loginStatus);
+
+        // Convert the URL to a JSON String.
+        String jsonMessage = messageListAsJson(loginObject);
+
+        // Send the JSON message as the response.
+        response.setContentType(TEXT_TYPE);
+        response.getWriter().println(jsonMessage);
     }
 
      /**
      * Converts a Java List<String> into a JSON string using Gson.  
      */
-    private String messageListAsJson(List<String> output) {
+    private String messageListAsJson(HashMap<String, String> output) {
         Gson gson = new Gson();
         String jsonMessage = gson.toJson(output);
         return jsonMessage;
