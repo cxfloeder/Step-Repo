@@ -74,7 +74,7 @@ function deleteComments() {
     fetch('/delete-data');
 }
 
-async function getLogInURL()
+async function loadLogInURL()
 {
     var response = await fetch('/login');
     var map = await response.json();
@@ -89,7 +89,7 @@ async function getLogInURL()
     }
 }
 
-async function getLogOutURL()
+async function loadLogOutURL()
 {
     var response = await fetch('/login');
     var map = await response.json();
