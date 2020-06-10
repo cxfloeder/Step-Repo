@@ -74,32 +74,53 @@ function deleteComments() {
     fetch('/delete-data');
 }
 
-async function getLogInURL()
-{
+async function loadLogInURL() {
     var response = await fetch('/login');
     var map = await response.json();
     console.log(map["loginURL"]);
-    if(map["loginURL"] != "")
-    {
+    if(map["loginURL"] != "") {
         window.location = map["loginURL"];
     }
-    else
-    {
+    else {
         window.location = "comments.html";
     }
 }
 
-async function getLogOutURL()
-{
+async function loadLogOutURL() {
     var response = await fetch('/login');
     var map = await response.json();
     console.log(map["logoutURL"]);
     if(map["logoutURL"] != "")
     {
         window.location = map["logoutURL"];
-    }
-    else
-    {
+    } else {
          window.location = "home.html";
     }
+}
+
+function loadChartData() {
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+}
+
+/** Creates a chart and adds it to the page. */
+function drawChart() {
+  const data = new google.visualization.DataTable();
+  data.addColumn('string', 'Animal');
+  data.addColumn('number', 'Count');
+        data.addRows([
+          ['Lions', 10],
+          ['Tigers', 5], 
+          ['Bears', 15]
+        ]);
+
+  const options = {
+    'title': 'Zoo Animals',
+    'width':500,
+    'height':400 
+  };
+
+  const chart = new google.visualization.PieChart(
+      document.getElementById('chart-container'));
+  chart.draw(data, options);
 }
