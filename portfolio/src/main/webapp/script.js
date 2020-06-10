@@ -74,39 +74,34 @@ function deleteComments() {
     fetch('/delete-data');
 }
 
-async function loadLogInURL()
-{
+async function loadLogInURL() {
     var response = await fetch('/login');
     var map = await response.json();
     console.log(map["loginURL"]);
-    if(map["loginURL"] != "")
-    {
+    if(map["loginURL"] != "") {
         window.location = map["loginURL"];
     }
-    else
-    {
+    else {
         window.location = "comments.html";
     }
 }
 
-async function loadLogOutURL()
-{
+async function loadLogOutURL() {
     var response = await fetch('/login');
     var map = await response.json();
     console.log(map["logoutURL"]);
     if(map["logoutURL"] != "")
     {
         window.location = map["logoutURL"];
-    }
-    else
-    {
+    } else {
          window.location = "home.html";
     }
 }
 
-
-google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChart);
+function loadChartData() {
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+}
 
 /** Creates a chart and adds it to the page. */
 function drawChart() {
