@@ -115,14 +115,14 @@ function drawChart() {
   data.addColumn('number', 'Count');
         data.addRows([
           ['Lions', 10],
-          ['Tigers', 5],
+          ['Tigers', 5], 
           ['Bears', 15]
         ]);
 
   const options = {
     'title': 'Zoo Animals',
     'width':500,
-    'height':400
+    'height':400 
   };
 
   const chart = new google.visualization.PieChart(
