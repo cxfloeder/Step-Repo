@@ -48,7 +48,7 @@ async function displayComments() {
     const response = await fetch('/data?num-comments=' + numComments);
     const messageArr = await response.json();
 
-    // Split messageArr into paragraph elements
+    // Split messageArr into paragraph elements.
     var output = messageArr.map(str => "<p>" + str.email + ": " + str.message + "</p>");
     document.getElementById('comment_section').innerHTML = output.join("");
 }
@@ -69,10 +69,37 @@ function validatePassword(form) {
     }
 }
 
-function isLoggedIn() {
-}
-
 /** Delete the entire datastore. */
 function deleteComments() {
     fetch('/delete-data');
+}
+
+async function getLogInURL()
+{
+    var response = await fetch('/login');
+    var map = await response.json();
+    console.log(map["loginURL"]);
+    if(map["loginURL"] != "")
+    {
+        window.location = map["loginURL"];
+    }
+    else
+    {
+        window.location = "comments.html";
+    }
+}
+
+async function getLogOutURL()
+{
+    var response = await fetch('/login');
+    var map = await response.json();
+    console.log(map["logoutURL"]);
+    if(map["logoutURL"] != "")
+    {
+        window.location = map["logoutURL"];
+    }
+    else
+    {
+         window.location = "home.html";
+    }
 }
