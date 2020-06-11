@@ -26,16 +26,15 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/pop-data")
 public class USPopGrowthDataServlet extends HttpServlet {
     private static final String JSON_TYPE = "application/json";
+    private static final String POP_DATA_FILE = "/WEB-INF/us-pop-growth-rate-by-year.csv";
     private LinkedHashMap<Integer, Double> populationGrowth = new LinkedHashMap<Integer, Double>();
-
 
     /**
      * Read and store population data from csv file.
      */
     @Override
     public void init() {
-        Scanner scan = new Scanner(getServletContext().getResourceAsStream(
-            "/WEB-INF/us-pop-growth-rate-by-year.csv"));
+        Scanner scan = new Scanner(getServletContext().getResourceAsStream(POP_DATA_FILE));
 
         while(scan.hasNextLine()) {
             String line = scan.nextLine();
