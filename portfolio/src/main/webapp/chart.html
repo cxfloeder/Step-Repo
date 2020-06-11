@@ -5,12 +5,28 @@
 	<title>Chart Page</title>
 	<script src="https://www.gstatic.com/charts/loader.js"></script>
 	<script src="script.js"></script>
+	<link rel="stylesheet" href="chart.css">
+	<link rel="stylesheet" href="common.css">
 </head>
 
 <body onload="javascript:loadChartData()">
-	<h1>First Google Chart</h1>
-	<div id="chart-container"></div>
+	<div class="drop_menu">
+		<button class="menu_button">Page Menu</button>
+		<div class="dropdown_content">
+			<a href="home.html">Home</a>
+			<a href="image_gallery.html">Images</a>
+			<a href="network_info.html">Network Info</a>
+			<a href="javascript:loadLogInURL()">Comments</a>
+			<a href="chart.html">Charts</a>
+		</div>
+	</div>
+	<h1>
+		<center><u>Charts</u></center>
+	</h1>
+	<h2>States I've Visited</h2>
+	<div id="states_graph"></div>
 	<p></p>
+
 </body>
 
 </html>

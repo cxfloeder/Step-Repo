@@ -78,7 +78,7 @@ async function loadLogInURL() {
     var response = await fetch('/login');
     var map = await response.json();
     console.log(map["loginURL"]);
-    if(map["loginURL"] != "") {
+    if (map["loginURL"] != "") {
         window.location = map["loginURL"];
     }
     else {
@@ -90,37 +90,39 @@ async function loadLogOutURL() {
     var response = await fetch('/login');
     var map = await response.json();
     console.log(map["logoutURL"]);
-    if(map["logoutURL"] != "")
-    {
+    if (map["logoutURL"] != "") {
         window.location = map["logoutURL"];
     } else {
-         window.location = "home.html";
+        window.location = "home.html";
     }
 }
 
 function loadChartData() {
-    google.charts.load('current', {'packages':['corechart']});
-    google.charts.setOnLoadCallback(drawChart);
+    google.charts.load('current', {
+        'packages': ['geochart']
+    });
+    google.charts.setOnLoadCallback(drawStatesMap);
 }
 
-/** Creates a chart and adds it to the page. */
-function drawChart() {
-  const data = new google.visualization.DataTable();
-  data.addColumn('string', 'Animal');
-  data.addColumn('number', 'Count');
-        data.addRows([
-          ['Lions', 10],
-          ['Tigers', 5], 
-          ['Bears', 15]
+function drawStatesMap() {
+    var data = google.visualization.arrayToDataTable([
+        ['State', 'Visited'],
+        ['Minnesota', "Minnesota"],
+        ['Wisconsin', 'Wisconsin'],
+        ['Nebraska', 'Nebraska'],
+        ['Florida', 'Florida'],
+        ['Iowa', 'Iowa'],
+        ['South Dakota', 'South Dakota'],
+        ['Illinois', 'Illinois'],
         ]);
 
-  const options = {
-    'title': 'Zoo Animals',
-    'width':500,
-    'height':400 
-  };
+    var options = {
+        region: 'US',
+        displayMode: 'regions',
+        resolution: 'provinces',
+    };
 
-  const chart = new google.visualization.PieChart(
-      document.getElementById('chart-container'));
-  chart.draw(data, options);
+    var chart = new google.visualization.GeoChart(document.getElementById('states_graph'));
+    chart.draw(data, options);
 }
+
