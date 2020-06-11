@@ -64,7 +64,7 @@ public class LoginServlet extends HttpServlet {
     }
 
      /**
-     * Converts a Java List<String> into a JSON string using Gson.  
+     * Converts a Java HashMap into a JSON string using Gson.  
      */
     private String messageListAsJson(HashMap<String, String> output) {
         Gson gson = new Gson();

@@ -101,9 +101,16 @@ function loadChartData() {
     google.charts.load('current', {
         'packages': ['geochart']
     });
+
+    google.charts.load('current', {
+        'packages':['corechart']
+    });
+
     google.charts.setOnLoadCallback(drawStatesMap);
+    google.charts.setOnLoadCallback(drawPopulationChart);
 }
 
+/** Create a geo-chart with all the states I've visited */
 function drawStatesMap() {
     var data = google.visualization.arrayToDataTable([
         ['State', 'Visited'],
@@ -120,9 +127,34 @@ function drawStatesMap() {
         region: 'US',
         displayMode: 'regions',
         resolution: 'provinces',
+        width: 900,
+        height: 500
     };
 
     var chart = new google.visualization.GeoChart(document.getElementById('states_graph'));
     chart.draw(data, options);
 }
 
+/** Create a chart mapping the population growth rate of the US */
+function drawPopulationChart() {
+    fetch('/pop-data').then(response => response.json()).then((growthRate) => {
+        const data = new google.visualization.DataTable();
+        data.addColumn('string', 'Year');
+        data.addColumn('number', 'Growth-Rate');
+
+        Object.keys(growthRate).forEach((year) => {
+            data.addRow([year, growthRate[year]]);
+        });
+
+        var options = {
+            title: 'US Population Growth Rate',
+            hAxis: {title: 'Year'},
+            vAxis: {title: 'Growth-Rate (%)'},
+            width: 900,
+            height: 500
+        };
+        
+        var chart = new google.visualization.LineChart(document.getElementById('pop_graph'));
+        chart.draw(data, options);
+    });
+}
