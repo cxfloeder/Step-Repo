@@ -34,7 +34,6 @@ public class SeasonDataServlet extends HttpServlet {
     private static final String WINTER_PROP = "Winter";
     private static final String FALL_PROP = "Fall";
     private static final String SPRING_PROP = "Spring";
-    private HashMap<String, Integer> seasonData = new HashMap<String, Integer>();
 
     public SeasonDataServlet() {
         super();
@@ -43,6 +42,8 @@ public class SeasonDataServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HashMap<String, Integer> seasonData = new HashMap<String, Integer>();
+
         Query query = new Query(Season.SEASON_ENTITY);
         PreparedQuery results = datastore.prepare(query);
         seasonData = loadSeasons(results);
@@ -76,7 +77,6 @@ public class SeasonDataServlet extends HttpServlet {
     }
 
     private HashMap<String, Integer> loadSeasons(PreparedQuery results) {
-        HashMap<String, Integer> seasonList = new HashMap<String, Integer>();
         int summerVotes = 0;
         int winterVotes = 0;
         int fallVotes = 0;
@@ -87,18 +87,21 @@ public class SeasonDataServlet extends HttpServlet {
             Season currentSeason = new Season(entity);
 
             if(currentSeason.season == null) {
-                // Do nothing if season is null.
-            } else if(currentSeason.season.equals(SUMMER_PROP)) {
+                continue;
+            } 
+            
+            if(currentSeason.season.equals(SUMMER_PROP)) {
                 summerVotes++;
             } else if(currentSeason.season.equals(WINTER_PROP)) {
                 winterVotes++;
             } else if(currentSeason.season.equals(FALL_PROP)) {
                 fallVotes++;
-            } else {
+            } else if(currentSeason.season.equals(SPRING_PROP)){
                 springVotes++;
             }
         }
 
+        HashMap<String, Integer> seasonList = new HashMap<String, Integer>();
         seasonList.put(SUMMER_PROP, summerVotes);
         seasonList.put(WINTER_PROP, winterVotes);
         seasonList.put(FALL_PROP, fallVotes);

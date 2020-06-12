@@ -2,6 +2,9 @@ package com.google.sps.data;
 
 import com.google.appengine.api.datastore.Entity;
 
+/**
+ * A class to implement Season Entities for Datastore use.
+ */
 public final class Season {
     public static final String SEASON_PROPERTY = "season";
     public static final String SEASON_ENTITY = "Season";
