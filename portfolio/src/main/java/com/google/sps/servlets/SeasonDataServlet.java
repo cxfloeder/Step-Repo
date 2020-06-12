@@ -14,6 +14,7 @@
 
 package com.google.sps.servlets;
 
+import com.google.sps.data.Season;
 import com.google.appengine.api.datastore.*;
 import com.google.gson.Gson;
 import javax.servlet.annotation.WebServlet;
@@ -26,9 +27,14 @@ import java.util.*;
 @WebServlet("/season-data")
 public class SeasonDataServlet extends HttpServlet {
     private final DatastoreService datastore;
-    private static final String DATASTORE_LABEL = "Task";
     private static final String JSON_TYPE = "application/json";
+    private static final String TEXT_TYPE = "text/html;";
     private static final String CHART_PAGE = "/chart.html";
+    private static final String SEASON_PARAM = "Season";
+    private static final String SUMMER_PROP = "Summer";
+    private static final String WINTER_PROP = "Winter";
+    private static final String FALL_PROP = "Fall";
+    private static final String SPRING_PROP = "Spring";
     private HashMap<String, Integer> seasonData = new HashMap<String, Integer>();
 
     public SeasonDataServlet() {
@@ -38,6 +44,11 @@ public class SeasonDataServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Query query = new Query(Season.SEASON_ENTITY);
+        PreparedQuery results = datastore.prepare(query);
+      
+        seasonData = loadSeasons(results);
+
         String jsonMessage = messageListAsJson(seasonData);
         response.setContentType(JSON_TYPE);
         response.getWriter().println(jsonMessage);
@@ -45,25 +56,56 @@ public class SeasonDataServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String season = request.getParameter("season");
-        int seasonVotes;
+        String season = request.getParameter(SEASON_PARAM);
 
-        if(seasonData.containsKey(season)) {
-            seasonVotes = seasonData.get(season) + 1;
-            seasonData.put(season, seasonVotes);
-        } else {
-            seasonData.put(season, 1);
-        }
+        Entity seasonEntity = parseForm(season);
+        datastore.put(seasonEntity);
 
         response.sendRedirect(CHART_PAGE);
     }
 
     /**
-     * Converts a Java List<Comment> into a JSON string using Gson.  
+     * Converts a Java List<Season> into a JSON string using Gson.  
      */
     private String messageListAsJson(HashMap<String, Integer> seasonData) {
         Gson gson = new Gson();
         String jsonMessage = gson.toJson(seasonData);
         return jsonMessage;
+    }
+
+    private Entity parseForm(String season) {
+        return new Season(season).toEntity();
+    }
+
+    private HashMap<String, Integer> loadSeasons(PreparedQuery results) {
+        HashMap<String, Integer> seasonList = new HashMap<String, Integer>();
+        int summerVotes = 0;
+        int winterVotes = 0;
+        int fallVotes = 0;
+        int springVotes = 0;
+
+        // Add the users desired amount of non-empty comments.
+        for (Entity entity : results.asIterable()) {
+            Season currentSeason = new Season(entity);
+
+            if(currentSeason.season == null) {
+                // Do nothing if season is null.
+            } else if(currentSeason.season.equals(SUMMER_PROP)) {
+                summerVotes++;
+            } else if(currentSeason.season.equals(WINTER_PROP)) {
+                winterVotes++;
+            } else if(currentSeason.season.equals(FALL_PROP)) {
+                fallVotes++;
+            } else {
+                springVotes++;
+            }
+        }
+
+        seasonList.put(SUMMER_PROP, summerVotes);
+        seasonList.put(WINTER_PROP, winterVotes);
+        seasonList.put(FALL_PROP, fallVotes);
+        seasonList.put(SPRING_PROP, springVotes);
+
+        return seasonList;
     }
 }
