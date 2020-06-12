@@ -103,7 +103,7 @@ function loadChartData() {
     });
 
     google.charts.load('current', {
-        'packages':['corechart']
+        'packages': ['corechart']
     });
 
     google.charts.setOnLoadCallback(drawStatesMap);
@@ -122,7 +122,7 @@ function drawStatesMap() {
         ['Iowa', 'Iowa'],
         ['South Dakota', 'South Dakota'],
         ['Illinois', 'Illinois'],
-        ]);
+    ]);
 
     var options = {
         region: 'US',
@@ -149,12 +149,12 @@ function drawPopulationChart() {
 
         var options = {
             title: 'US Population Growth Rate',
-            hAxis: {title: 'Year'},
-            vAxis: {title: 'Growth-Rate (%)'},
+            hAxis: { title: 'Year' },
+            vAxis: { title: 'Growth-Rate (%)' },
             width: 900,
             height: 500
         };
-        
+
         var chart = new google.visualization.LineChart(document.getElementById('pop_graph'));
         chart.draw(data, options);
     });
@@ -180,5 +180,5 @@ function drawSeasonChart() {
 
         var chart = new google.visualization.PieChart(document.getElementById('season_chart'));
         chart.draw(data, options);
-   });
+    });
 }

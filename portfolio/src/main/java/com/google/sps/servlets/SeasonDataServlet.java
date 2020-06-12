@@ -28,7 +28,6 @@ import java.util.*;
 public class SeasonDataServlet extends HttpServlet {
     private final DatastoreService datastore;
     private static final String JSON_TYPE = "application/json";
-    private static final String TEXT_TYPE = "text/html;";
     private static final String CHART_PAGE = "/chart.html";
     private static final String SEASON_PARAM = "Season";
     private static final String SUMMER_PROP = "Summer";
@@ -46,7 +45,6 @@ public class SeasonDataServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Query query = new Query(Season.SEASON_ENTITY);
         PreparedQuery results = datastore.prepare(query);
-      
         seasonData = loadSeasons(results);
 
         String jsonMessage = messageListAsJson(seasonData);
