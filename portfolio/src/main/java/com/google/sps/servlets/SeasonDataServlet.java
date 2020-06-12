@@ -29,7 +29,7 @@ public class SeasonDataServlet extends HttpServlet {
     private final DatastoreService datastore;
     private static final String JSON_TYPE = "application/json";
     private static final String CHART_PAGE = "/chart.html";
-    private static final String SEASON_PARAM = "Season";
+    private static final String SEASON_PARAM = "season";
     private static final String SUMMER_PROP = "Summer";
     private static final String WINTER_PROP = "Winter";
     private static final String FALL_PROP = "Fall";
