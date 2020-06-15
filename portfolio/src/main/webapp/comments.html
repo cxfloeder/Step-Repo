@@ -17,8 +17,8 @@
 				<a href="home.html">Home</a>
 				<a href="image_gallery.html">Images</a>
 				<a href="network_info.html">Network Info</a>
-                <a href="comments.html">Comments</a>
-                <a href="chart.html">Charts</a>
+				<a href="comments.html">Comments</a>
+				<a href="chart.html">Charts</a>
 			</div>
 		</div>
 		<a href="home.html" class="padding previous round">&#8249;</a>
@@ -26,25 +26,25 @@
 			<center><u>Comments</u></center>
 		</h1>
 		<h3>Add your comments here.</h3>
-        <form action="/data" method="POST">
-            <input type="text" id="comment-input" name="comment-input" />
-            <br/>
-            <input type="submit" />
-        </form>    
-        <form action="javascript:displayComments()" method="GET">
-            <p>How many comments do you want to see?</p>
-            <input id="num-comments" type="number" name="num-comments" min="0" max ="20" value="0" />
-            <input type="submit" />
+		<form action="/data" method="POST">
+			<input type="text" id="comment-input" name="comment-input" />
+			<br/>
+			<input type="submit" />
         </form>
-        <div id="comment_section"></div>
-        <br/><br/>
-        <form onSubmit="return validatePassword(this)"> 
-            <p>Enter the password to delete comments.</p>
-            <input type="password" name="password" size="25" /> 
-            <input type="submit" value="Submit">
-        </form> 
-        <br/>
-        <button onclick="javascript:loadLogOutURL()">logout</button>
+			<form action="javascript:displayComments()" method="GET">
+				<p>How many comments do you want to see?</p>
+				<input id="num-comments" type="number" name="num-comments" min="0" max ="20" value="0" />
+				<input type="submit" />
+        </form>
+				<div id="comment_section"></div>
+				<br/><br/>
+				<form onSubmit="return validatePassword(this)">
+					<p>Enter the password to delete comments.</p>
+					<input type="password" name="password" size="25" />
+					<input type="submit" value="Submit">
+        </form>
+					<br/>
+					<button onclick="javascript:loadLogOutURL()">logout</button>
 	</div>
 </body>
 

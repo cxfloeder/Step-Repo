@@ -103,11 +103,12 @@ function loadChartData() {
     });
 
     google.charts.load('current', {
-        'packages':['corechart']
+        'packages': ['corechart']
     });
 
     google.charts.setOnLoadCallback(drawStatesMap);
     google.charts.setOnLoadCallback(drawPopulationChart);
+    google.charts.setOnLoadCallback(drawSeasonChart);
 }
 
 /** Create a geo-chart with all the states I've visited */
@@ -121,7 +122,7 @@ function drawStatesMap() {
         ['Iowa', 'Iowa'],
         ['South Dakota', 'South Dakota'],
         ['Illinois', 'Illinois'],
-        ]);
+    ]);
 
     var options = {
         region: 'US',
@@ -148,13 +149,36 @@ function drawPopulationChart() {
 
         var options = {
             title: 'US Population Growth Rate',
-            hAxis: {title: 'Year'},
-            vAxis: {title: 'Growth-Rate (%)'},
+            hAxis: { title: 'Year' },
+            vAxis: { title: 'Growth-Rate (%)' },
             width: 900,
             height: 500
         };
-        
+
         var chart = new google.visualization.LineChart(document.getElementById('pop_graph'));
+        chart.draw(data, options);
+    });
+}
+
+/** Create a chart mapping the user's favorite season */
+function drawSeasonChart() {
+    fetch('/season-data').then(response => response.json()).then((seasonVotes) => {
+        const data = new google.visualization.DataTable();
+        data.addColumn('string', 'Season');
+        data.addColumn('number', 'numVotes');
+
+        Object.keys(seasonVotes).forEach((season) => {
+            data.addRow([season, seasonVotes[season]]);
+        });
+
+        var options = {
+            title: 'Portfolio User\'s Favorite Season',
+            pieHole: 0.4,
+            width: 900,
+            height: 500
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('season_chart'));
         chart.draw(data, options);
     });
 }
