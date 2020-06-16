@@ -24,10 +24,13 @@ public final class FindMeetingQuery {
         long duration = request.getDuration();
 
         // Get all the timeRanges where the attendees have scheduled meetings.
-        ArrayList<TimeRange> unvailableTimeForRequiredAttendees = getAttendeesScheduledMeetingTimes(events, requiredAttendees);
-        ArrayList<TimeRange> unvailableTimeForOptionalAttendees = getAttendeesScheduledMeetingTimes(events, optionalAttendees);
+        ArrayList<TimeRange> unvailableTimeForRequiredAttendees = 
+            getAttendeesScheduledMeetingTimes(events, requiredAttendees);
+        ArrayList<TimeRange> unvailableTimeForOptionalAttendees = 
+            getAttendeesScheduledMeetingTimes(events, optionalAttendees);
 
-        ArrayList<TimeRange> unvailableTimeForAllAttendees = new ArrayList<TimeRange>(unvailableTimeForRequiredAttendees);
+        ArrayList<TimeRange> unvailableTimeForAllAttendees = 
+            new ArrayList<TimeRange>(unvailableTimeForRequiredAttendees);
         unvailableTimeForAllAttendees.addAll(unvailableTimeForOptionalAttendees);
 
         // Sort the meeting time intervals.
@@ -50,7 +53,9 @@ public final class FindMeetingQuery {
     /**
      * Return all the times where attendees have scheduled meetings.
      */
-    private ArrayList<TimeRange> getAttendeesScheduledMeetingTimes(Collection<Event> events, Collection<String> attendees) {
+    private ArrayList<TimeRange> getAttendeesScheduledMeetingTimes
+        (Collection<Event> events, Collection<String> attendees) {
+            
         ArrayList<TimeRange> meetingTimes = new ArrayList<TimeRange>();
 
         for(Event event : events) {
@@ -86,7 +91,9 @@ public final class FindMeetingQuery {
     /**
      * Find times that the attendees can meet given a sorted collection of unavailable meeting times.
      */
-    private Collection<TimeRange> findAvailableMeetingTimes(Collection<TimeRange> unavailableTimes, long minimumDuration) {
+    private Collection<TimeRange> findAvailableMeetingTimes
+        (Collection<TimeRange> unavailableTimes, long minimumDuration) {
+
         Collection<TimeRange> meetingTimes = new ArrayList<TimeRange>();
         
         int startTime = TimeRange.START_OF_DAY;
