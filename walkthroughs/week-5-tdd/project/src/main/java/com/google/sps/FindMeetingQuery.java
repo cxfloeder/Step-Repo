@@ -18,44 +18,57 @@ import java.util.*;
 
 public final class FindMeetingQuery {
     public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-        // Get necessary info from the MeetingRequest object (HashSets).
+        // Get necessary info from the MeetingRequest object.
         Collection<String> requiredAttendees = request.getAttendees();
+        Collection<String> optionalAttendees = request.getOptionalAttendees();
         long duration = request.getDuration();
 
-        // Get all the timeRanges where required attendees have scheduled meetings.
-        ArrayList<TimeRange> relevantTimes = new ArrayList<TimeRange>();
-        relevantTimes = getReleventTimes(events, requiredAttendees);
+        // Get all the timeRanges where the attendees have scheduled meetings.
+        ArrayList<TimeRange> requiredTimes = getEventTimes(events, requiredAttendees);
+        ArrayList<TimeRange> optionalTimes = getEventTimes(events, optionalAttendees);
 
-        // sort the event time intervals
-        relevantTimes = sortTimeRanges(relevantTimes);
+        ArrayList<TimeRange> allTimes = new ArrayList<TimeRange>(requiredTimes);
+        allTimes.addAll(optionalTimes);
 
-        // Find times that the required attendees can meet.
-        return findMeetingTimes(relevantTimes, duration);
+        // Sort the meeting time intervals.
+        requiredTimes = sortTimeRanges(requiredTimes);
+        allTimes = sortTimeRanges(allTimes);
+
+        // Find times where the attendees can meet.
+        Collection<TimeRange> requiredMeetings = new ArrayList<TimeRange>();
+        if(requiredTimes.size() != 0) {
+            requiredMeetings = findMeetingTimes(requiredTimes, duration);
+        }
+        Collection<TimeRange> optionalMeetings = findMeetingTimes(allTimes, duration);
+
+        if(optionalMeetings.size() != 0) {
+            return optionalMeetings;
+        }
+        return requiredMeetings;
     }
 
     /**
-     * Return all the times where required attendees have scheduled meetings.
+     * Return all the times where attendees have scheduled meetings.
      */
-    private ArrayList<TimeRange> getReleventTimes(Collection<Event> events, Collection<String> requiredAttendees) {
-        // don't know exactly what to put after the equals sign
-        ArrayList<TimeRange> relevantTimes = new ArrayList<TimeRange>();
+    private ArrayList<TimeRange> getEventTimes(Collection<Event> events, Collection<String> attendees) {
+        ArrayList<TimeRange> meetingTimes = new ArrayList<TimeRange>();
 
         for(Event event : events) {
-            if(isScheduled(event, requiredAttendees)) {
-                relevantTimes.add(event.getWhen());
+            if(isScheduled(event, attendees)) {
+                meetingTimes.add(event.getWhen());
             }
         }
-        return relevantTimes;
+        return meetingTimes;
     }
 
     /**
-     * Check if an event has a required attendee scheduled for it.
+     * Check if an event has certain attendees scheduled for it.
      */
-    private boolean isScheduled(Event event, Collection<String> requiredAttendees) {
+    private boolean isScheduled(Event event, Collection<String> attendees) {
         Set<String> eventAttendees = event.getAttendees();
 
-        for(String requiredAttendee : requiredAttendees) {
-            if(eventAttendees.contains(requiredAttendee)) {
+        for(String attendee : attendees) {
+            if(eventAttendees.contains(attendee)) {
                 return true;
             }
         }
@@ -71,7 +84,7 @@ public final class FindMeetingQuery {
     }
 
     /**
-     * Find times that the required attendees can meet.
+     * Find times that the attendees can meet.
      */
     private Collection<TimeRange> findMeetingTimes(Collection<TimeRange> relevantTimes, long duration) {
         Collection<TimeRange> meetingTimes = new ArrayList<TimeRange>();
@@ -97,4 +110,6 @@ public final class FindMeetingQuery {
         return meetingTimes;
     }
 }
+
+
 
