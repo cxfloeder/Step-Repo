@@ -24,22 +24,22 @@ public final class FindMeetingQuery {
         long duration = request.getDuration();
 
         // Get all the timeRanges where the attendees have scheduled meetings.
-        ArrayList<TimeRange> requiredTimes = getEventTimes(events, requiredAttendees);
-        ArrayList<TimeRange> optionalTimes = getEventTimes(events, optionalAttendees);
+        ArrayList<TimeRange> unvailableTimeForRequiredAttendees = getAttendeesScheduledMeetingTimes(events, requiredAttendees);
+        ArrayList<TimeRange> unvailableTimeForOptionalAttendees = getAttendeesScheduledMeetingTimes(events, optionalAttendees);
 
-        ArrayList<TimeRange> allTimes = new ArrayList<TimeRange>(requiredTimes);
-        allTimes.addAll(optionalTimes);
+        ArrayList<TimeRange> unvailableTimeForAllAttendees = new ArrayList<TimeRange>(unvailableTimeForRequiredAttendees);
+        unvailableTimeForAllAttendees.addAll(unvailableTimeForOptionalAttendees);
 
         // Sort the meeting time intervals.
-        requiredTimes = sortTimeRanges(requiredTimes);
-        allTimes = sortTimeRanges(allTimes);
+        unvailableTimeForRequiredAttendees = sortByStartTime(unvailableTimeForRequiredAttendees);
+        unvailableTimeForAllAttendees = sortByStartTime(unvailableTimeForAllAttendees);
 
         // Find times where the attendees can meet.
         Collection<TimeRange> requiredMeetings = new ArrayList<TimeRange>();
-        if(requiredTimes.size() != 0) {
-            requiredMeetings = findMeetingTimes(requiredTimes, duration);
+        if(unvailableTimeForRequiredAttendees.size() != 0) {
+            requiredMeetings = findAvailableMeetingTimes(unvailableTimeForRequiredAttendees, duration);
         }
-        Collection<TimeRange> optionalMeetings = findMeetingTimes(allTimes, duration);
+        Collection<TimeRange> optionalMeetings = findAvailableMeetingTimes(unvailableTimeForAllAttendees, duration);
 
         if(optionalMeetings.size() != 0) {
             return optionalMeetings;
@@ -50,11 +50,11 @@ public final class FindMeetingQuery {
     /**
      * Return all the times where attendees have scheduled meetings.
      */
-    private ArrayList<TimeRange> getEventTimes(Collection<Event> events, Collection<String> attendees) {
+    private ArrayList<TimeRange> getAttendeesScheduledMeetingTimes(Collection<Event> events, Collection<String> attendees) {
         ArrayList<TimeRange> meetingTimes = new ArrayList<TimeRange>();
 
         for(Event event : events) {
-            if(isScheduled(event, attendees)) {
+            if(isAnyAttendeeScheduledForEvent(event, attendees)) {
                 meetingTimes.add(event.getWhen());
             }
         }
@@ -62,9 +62,9 @@ public final class FindMeetingQuery {
     }
 
     /**
-     * Check if an event has certain attendees scheduled for it.
+     * Check if any attendee from the Collection is scheduled for the given event.
      */
-    private boolean isScheduled(Event event, Collection<String> attendees) {
+    private boolean isAnyAttendeeScheduledForEvent(Event event, Collection<String> attendees) {
         Set<String> eventAttendees = event.getAttendees();
 
         for(String attendee : attendees) {
@@ -78,24 +78,24 @@ public final class FindMeetingQuery {
     /**
      * Orders TimeRanges by their start-times in ascending order.
      */
-    private ArrayList<TimeRange> sortTimeRanges(ArrayList<TimeRange> relevantTimes) {
+    private ArrayList<TimeRange> sortByStartTime(ArrayList<TimeRange> relevantTimes) {
         Collections.sort(relevantTimes, TimeRange.ORDER_BY_START);
         return relevantTimes;
     }
 
     /**
-     * Find times that the attendees can meet.
+     * Find times that the attendees can meet given a sorted collection of unavailable meeting times.
      */
-    private Collection<TimeRange> findMeetingTimes(Collection<TimeRange> relevantTimes, long duration) {
+    private Collection<TimeRange> findAvailableMeetingTimes(Collection<TimeRange> unavailableTimes, long minimumDuration) {
         Collection<TimeRange> meetingTimes = new ArrayList<TimeRange>();
         
         int startTime = TimeRange.START_OF_DAY;
         int endTime = TimeRange.END_OF_DAY;
 
         // Add available meeting times to the List.
-        for(TimeRange timeRange : relevantTimes) {
+        for(TimeRange timeRange : unavailableTimes) {
             endTime = timeRange.start();
-            if(endTime - startTime >= duration) {
+            if(endTime - startTime >= minimumDuration) {
                 meetingTimes.add(TimeRange.fromStartEnd(startTime, endTime, false));
             }
             // Prevent failure for nested events.
@@ -104,7 +104,7 @@ public final class FindMeetingQuery {
             }
         }
         // Add the last meeting time if possible. 
-        if(TimeRange.END_OF_DAY - startTime >= duration) {
+        if(TimeRange.END_OF_DAY - startTime >= minimumDuration) {
             meetingTimes.add(TimeRange.fromStartEnd(startTime, TimeRange.END_OF_DAY, true));
         }
         return meetingTimes;
