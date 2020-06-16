@@ -79,7 +79,7 @@ public final class FindMeetingQueryTest {
   }
 
   @Test
-  public void eventSplitsRestriction() {
+  public void eventSplitsRestriction() { // FAIL
     // The event should split the day into two options (before and after the event).
     Collection<Event> events = Arrays.asList(new Event("Event 1",
         TimeRange.fromStartDuration(TIME_0830AM, DURATION_30_MINUTES), Arrays.asList(PERSON_A)));
@@ -95,7 +95,7 @@ public final class FindMeetingQueryTest {
   }
 
   @Test
-  public void everyAttendeeIsConsidered() {
+  public void everyAttendeeIsConsidered() { //FAIL
     // Have each person have different events. We should see two options because each person has
     // split the restricted times.
     //
@@ -122,7 +122,7 @@ public final class FindMeetingQueryTest {
   }
 
   @Test
-  public void overlappingEvents() {
+  public void overlappingEvents() { // FAIL
     // Have an event for each person, but have their events overlap. We should only see two options.
     //
     // Events  :       |--A--|
@@ -200,7 +200,7 @@ public final class FindMeetingQueryTest {
   }
 
   @Test
-  public void justEnoughRoom() {
+  public void justEnoughRoom() { 
     // Have one person, but make it so that there is just enough room at one point in the day to
     // have the meeting.
     //
@@ -249,7 +249,7 @@ public final class FindMeetingQueryTest {
   }
 
   @Test
-  public void notEnoughRoom() {
+  public void notEnoughRoom() { //FAIL
     // Have one person, but make it so that there is not enough room at any point in the day to
     // have the meeting.
     //
